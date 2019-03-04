@@ -1,0 +1,44 @@
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'pages:index' %}">
+                好记性<small>不如</small><strong>烂笔头</strong>
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'pages:list' %}">博文列表</a></li>
+                <li><a href="{% url 'pages:copyright' %}">版权声明</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        点我 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'pages:about' %}">关于我</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'pages:message' %}">给我留言</a></li>
+                    </ul>
+                </li>
+                <li class="top-nav-search">
+                    <!-- <input type="text" name="txt-search" placeholder="search" /> -->
+                    <form action="/search/" id="header-search" class="navbar-form" role="search">
+                        <div class="form-group">
+                            <div class="input-group-container header-search">
+                                <span class="input-group-container-addon">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </span>
+                                <input type="text" class="form-control" placeholder="回车搜索" name="query">
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>

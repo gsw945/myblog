@@ -1,0 +1,68 @@
+{% extends "base-layout.html" %}
+
+{% block head_css %}
+    {{ block.super }}
+    <style type="text/css">
+        #page-main {
+            min-height: 100px;
+            margin: 0 auto;
+            max-width: 38em;
+            text-align: left;
+        }
+        #page-main dd {
+            text-indent: 2em;
+            /*text-decoration: underline dotted #fa1;*/
+            text-shadow: #a1b3f3 1px 2px 8px;
+        }
+        #page-main dd + dt {
+            margin-top: 0.39em;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12 col-md-12 text-center">
+            <div id="page-main">
+                <dl>
+                    <dt>昵称:</dt>
+                    <dd>玖亖伍</dd>
+                    <dt>网络用户名:</dt>
+                    <dd>gsw945</dd>
+                    <dt>名称释意:</dt>
+                    <dd>GSW就是我</dd>
+                    <dt>说明:</dt>
+                    <dd>网络上，<strong>gsw945</strong>一般是我，但不全是，比如微信就不是~这名字也有人抢 :)</dd>
+                    <dt>
+                        Github
+                    </dt>
+                    <dd>
+                        <a href="https://github.com/gsw945/" target="_blank">gsw945</a>
+                    </dd>
+                    <dt>最喜欢(用着最有感觉)的编程语言:</dt>
+                    <dd>
+                        <a href="https://www.python.org/">Python</a>
+                    </dd>
+                    <dt>最不喜欢使用的编程语言:</dt>
+                    <dd>
+                        <span style="text-decoration: line-through">Java</span>
+                    </dd>
+                    <dt>还会点儿啥:</dt>
+                    <dd>C#、PHP、Node.JS ~</dd>
+                    <dt>最喜欢(常用)使用的操作系统:</dt>
+                    <dd>
+                        <a href="https://www.ubuntu.com/" target="_blank">Ubuntu</a>
+                    </dd>
+                    <dt>最不喜欢使用的操作系统:</dt>
+                    <dd>
+                        <span style="text-decoration: line-through">CentOS</span>
+                    </dd>
+                    <dt>特别说明:</dt>
+                    <dd>
+                        <a href="http://blog.gsw945.com/">博客</a> 内容，部分参考自 <a href="https://stackoverflow.com/" target="_blank">Stack Overflow</a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}

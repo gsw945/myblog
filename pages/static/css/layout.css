@@ -1,0 +1,50 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"微软雅黑","Microsoft YaHei",FreeSans,Arimo,"Droid Sans","wenquanyi micro hei","Hiragino Sans GB","Hiragino Sans GB W3",FontAwesome,sans-serif !important;
+    /*font-size: 12px;*/
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+a,
+a:visited {
+    color: #0f3ff7;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+
+
+.page-footer {
+    position: absolute;
+    bottom: 0;
+    height: 63px;
+    width: 100%;
+}
+
+@media(min-width: 768px) {
+    .main-right-part {
+        padding-left: 0;
+        padding-right: 5px;
+        margin-left: -9px;
+    }
+}
+@media(min-width: 1200px) {
+    .col-lg-2.main-right-part {
+        width: 24.3%;
+    }
+}
