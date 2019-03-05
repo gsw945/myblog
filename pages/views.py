@@ -26,7 +26,7 @@ def view_detail(request, article_id):
             'article': article
         }
         return render(request, 'article/detail.html', context)
-    return Http404('博文不存在')
+    raise Http404('博文不存在')
 
 def view_search(request):
     context = {}

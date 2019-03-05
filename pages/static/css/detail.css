@@ -1,4 +1,51 @@
 .blog-content p > img {
-    width: 100%;
+    max-width: 100%;
     height: auto;
+}
+
+.hljs {
+    display: inline-block;
+    white-space: pre;
+    overflow-x: auto;
+    padding: 0.5em;
+    color: #333;
+    background: #f8f8f8;
+    position: relative;
+}
+
+.hljs-ln-numbers {
+    text-align: right;
+    border-right: 1px solid #ccc;
+    color: #999;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.hljs-ln-numbers .hljs-ln-line {
+    padding-right: 2px;
+}
+
+.hljs-ln-code .hljs-ln-line {
+    padding-left: 2px;
+}
+
+.lang-name-label {
+    position: absolute;
+    right: 0.5em;
+    top: 0;
+    margin-bottom: 0;
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity 1200ms, visibility 1200ms;
+    transition: opacity 1200ms, visibility 1200ms;
+}
+
+.hljs:hover .lang-name-label {
+    /*display: none;*/
+    visibility: hidden;
+    opacity: 0;
 }
