@@ -88,3 +88,7 @@
     vertical-align: middle;
     font-size: 0.2em;
 }
+
+.tag-wrapper + .tag-wrapper {
+    margin-left: 0.6em;
+}
