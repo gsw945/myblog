@@ -1,6 +1,7 @@
 import os
 import json
 import uuid
+import time
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -43,12 +44,19 @@ def markdown_uploader(request):
                     data, content_type='application/json', status=405)
 
             img_uuid = "{0}-{1}".format(uuid.uuid4().hex[:10], image.name.replace(' ', '-'))
-            tmp_file = os.path.join(settings.MARTOR_UPLOAD_PATH, img_uuid)
-            def_path = default_storage.save(tmp_file, ContentFile(image.read()))
-            img_url = os.path.join(settings.MEDIA_URL, def_path)
+            tmp_file = os.path.join(
+                settings.MARTOR_UPLOAD_PATH,
+                time.strftime(settings.MARTOR_FOLDER_FORMAT),
+                img_uuid
+            )
+            save_path = os.path.join(settings.MEDIA_ROOT, tmp_file)
+            def_path = default_storage.save(save_path, ContentFile(image.read()))
+            img_url = os.path.join(settings.MEDIA_URL, tmp_file).replace('\\', '/')
+            img_path = def_path
 
             data = json.dumps({
                 'status': 200,
+                'path': img_path,
                 'link': img_url,
                 'name': image.name
             })

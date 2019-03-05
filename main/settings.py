@@ -122,21 +122,70 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+# `python manage.py collectstatic`
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Media Path
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Global martor settings
 # Input: string boolean, `true/false`
 MARTOR_ENABLE_CONFIGS = {
-    'imgur': 'false',     # to enable/disable imgur uploader/custom uploader.
+    'imgur': 'true',     # to enable/disable imgur uploader/custom uploader.
     'mention': 'false',   # to enable/disable mention
     'jquery': 'true',    # to include/revoke jquery (require for admin default django)
-    'living': 'true',   # to enable/disable live updates in preview
+    'living': 'false',   # to enable/disable live updates in preview
 }
 
+# To setup the martor editor with label or not (default is False)
+MARTOR_ENABLE_LABEL = False
+
+# Imgur API Keys
+# MARTOR_IMGUR_CLIENT_ID = '<your-client-id>'
+# MARTOR_IMGUR_API_KEY  = '<your-api-key>'
+
+# Safe Mode
+# False - Raw HTML is passed through unaltered.
+# "replace" - Replace all HTML blocks with the text assigned to html_replacement_text
+# "remove" - All raw HTML will be completely stripped from the text with no warning to the author.
+# "escape" - All raw HTML will be escaped and included in the document.
+MARTOR_MARKDOWN_SAFE_MODE = True # default
+
+# Markdownify
+MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify' # default
+MARTOR_MARKDOWNIFY_URL = '/martor/markdownify/' # default
+
+# Markdown extensions (default)
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+    # Custom markdown extensions.
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins',    # ~~strikethrough~~ and ++underscores++
+    # 'martor.extensions.mention',    # to parse markdown mention
+    'martor.extensions.emoji',      # to parse markdown emoji
+    'martor.extensions.mdx_video',  # to parse embed/iframe video
+]
+
+# Markdown Extensions Configs
+MARTOR_MARKDOWN_EXTENSION_CONFIGS = {}
+
+# Markdown Extensions
+# MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
+MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://github.githubassets.com/images/icons/emoji/'                  # default from github
+# MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://python.web.id/author/'
+
+# let csrf can sent over ajax calls
+CSRF_COOKIE_HTTPONLY = False
+
 # Upload to locale storage
-import time
-MARTOR_UPLOAD_PATH = 'images/uploads/{}'.format(time.strftime("%Y/%m/%d/"))
+MARTOR_UPLOAD_PATH = 'uploads'
+MARTOR_FOLDER_FORMAT = "%Y-%m-%d"
 MARTOR_UPLOAD_URL = '/api/uploader/'  # change to local uploader
+MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
 
 # Maximum Upload Image
 # 2.5MB - 2621440
@@ -148,7 +197,3 @@ MARTOR_UPLOAD_URL = '/api/uploader/'  # change to local uploader
 # 250MB - 214958080
 # 500MB - 429916160
 MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
-
-# Media Path
-MEDIA_URL = '/media/'
-os.path.join(BASE_DIR, 'media')
