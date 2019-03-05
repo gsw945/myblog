@@ -7,37 +7,14 @@
 
 {% block content_left %}
     <ul class="list-group blog-list-panel">
+        {% for article in article_list %}
         <li class="list-group-item">
             <h4 class="list-group-item-heading">
-                <a href="/article/2">Linux上修改MySQL数据库root密码</a>
+                <a href="{% url 'pages:detail' article.id %}">{{ article.title }}</a>
                 {% if user.is_authenticated %}
                 <span class="ico-btn-edit">
-                    <a href="/edit/?id=2" title="编辑">
-                        <i class="fas fa-pen-square"></i>
-                    </a>
-                </span>
-                {% endif %}
-            </h4>
-            <p class="list-group-item-text">测试内容</p>
-            <div class="list-group-item-footing">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6">
-                        <span>mysql, 标签1</span>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 text-right">
-                        <span class="text-muted">2017-12-12 10:32:35</span>
-                    </div>
-                </div>
-            </div>
-        </li>
-
-        <li class="list-group-item">
-            <h4 class="list-group-item-heading">
-                <a href="/article/1">测试</a>
-                {% if user.is_authenticated %}
-                <span class="ico-btn-edit">
-                    <a href="/edit/?id=1" title="编辑">
-                        <i class="fas fa-pen-square"></i>
+                    <a href="/admin/pages/article/{{ article.id }}/change/" title="编辑">
+                        <i class="far fa-edit"></i>
                     </a>
                 </span>
                 {% endif %}
@@ -46,14 +23,16 @@
             <div class="list-group-item-footing">
                 <div class="row">
                     <div class="col-xs-12 col-sm-6">
-                        <span>T1, tag2, S3</span>
+                        <span><i class="fas fa-tag"></i> mysql</span>
+                        <span><i class="fas fa-tag"></i> 标签1</span>
                     </div>
                     <div class="col-xs-12 col-sm-6 text-right">
-                        <span class="text-muted">2017-11-20 00:47:56</span>
+                        <span class="text-muted">{{ article.upate_time }}</span>
                     </div>
                 </div>
             </div>
         </li>
+        {% endfor %}
     </ul>
     <div class="blog-list-pagination">
         <nav aria-label="blog-list-pagination">

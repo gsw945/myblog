@@ -83,3 +83,8 @@
 .blog-list-pagination {
     margin: auto 36px;
 }
+
+.fas.fa-tag {
+    vertical-align: middle;
+    font-size: 0.2em;
+}

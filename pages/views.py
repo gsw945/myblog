@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
+from .models import Article
 
 
 def view_index(request):
@@ -9,7 +10,10 @@ def view_index(request):
     return render(request, 'page-index.html', context)
 
 def view_list(request):
-    context = {}
+    articles = Article.objects.all()
+    context = {
+        'article_list': articles
+    }
     return render(request, 'article/list.html', context)
 
 def view_detail(request, article_id):
