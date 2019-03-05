@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
+from django.db import models
+from martor.widgets import AdminMartorWidget
 from .models import Article, Tag, ArticleTags
 
 
@@ -17,6 +19,9 @@ class ArticleAdmin(admin.ModelAdmin):
     readonly_fields = ['create_time', 'upate_time'] # 只读字段
     # show_change_link = True
     inlines = (TagsInlineAdmin,)
+    formfield_overrides = {
+        models.TextField: {'widget': AdminMartorWidget},
+    }
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Tag)
