@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from .models import Article, Tag
 
 
@@ -19,8 +19,14 @@ def view_list(request):
     return render(request, 'article/list.html', context)
 
 def view_detail(request, article_id):
-    context = {}
-    return render(request, 'article/detail.html', context)
+    article_set = Article.objects.filter(id=article_id)
+    if article_set.count() > 0:
+        article = article_set.first()
+        context = {
+            'article': article
+        }
+        return render(request, 'article/detail.html', context)
+    return Http404('博文不存在')
 
 def view_search(request):
     context = {}

@@ -7,13 +7,18 @@
 
 {% block content_left %}
 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
-    ['title', 'id', 'create_time', 'markdown', 'tags', 'html', 'category', 'sketch']
     <div class="blog-title">
-        <h2>test</h2>
+        <h2>{{ article.title }}</h2>
     </div>
     <div class="blog-content">
-        <p>This text will appear in the editor  </p>
-        页面内容
+        <script type="text/x-markdown" id="article-markdown">{{ article.content }}</script>
+    </div>
+    <div class="blog-tags">
+        {% for tag in article.tags.all %}
+            <span class="tag-wrapper"><i class="fas fa-tag"></i> {{ tag.name }}</span>
+        {% empty %}
+            <span>没有添加标签</span>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
