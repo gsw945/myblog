@@ -13,6 +13,17 @@ from django.core.files.base import ContentFile
 from martor.utils import LazyEncoder
 
 
+def image_thumbnail(path, width=128, height=None):
+    '''
+    创建缩略图
+    TOOD: 图片尺寸修改和保存
+    '''
+    from PIL import Image
+    img = Image.open(path[0])
+    img = img.resize((width, height), Image.ANTIALIAS)
+    import ipdb; ipdb.set_trace()
+    pass
+
 @login_required
 def markdown_uploader(request):
     """
@@ -53,6 +64,7 @@ def markdown_uploader(request):
             def_path = default_storage.save(save_path, ContentFile(image.read()))
             img_url = os.path.join(settings.MEDIA_URL, tmp_file).replace('\\', '/')
             img_path = def_path
+            # image_thumbnail((image, img_path, img_url), width=128) # debug
 
             data = json.dumps({
                 'status': 200,
