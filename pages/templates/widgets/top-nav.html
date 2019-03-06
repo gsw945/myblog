@@ -13,16 +13,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'pages:list' %}">博文列表</a></li>
-                <li><a href="{% url 'pages:copyright' %}">版权声明</a></li>
+                <li data-page-view="pages:list"><a href="{% url 'pages:list' %}">博文列表</a></li>
+                <li data-page-view="pages:copyright"><a href="{% url 'pages:copyright' %}">版权声明</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         点我 <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'pages:about' %}">关于我</a></li>
+                        <li data-page-view="pages:about"><a href="{% url 'pages:about' %}">关于我</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="{% url 'pages:message' %}">给我留言</a></li>
+                        <li data-page-view="pages:message"><a href="{% url 'pages:message' %}">给我留言</a></li>
                     </ul>
                 </li>
                 <li class="top-nav-search">
@@ -33,7 +33,7 @@
                                 <span class="input-group-container-addon">
                                     <span class="glyphicon glyphicon-search"></span>
                                 </span>
-                                <input type="text" class="form-control" placeholder="回车搜索" name="query">
+                                <input type="text" class="form-control" placeholder="回车搜索" name="query" value="{{ request.GET.query }}" />
                             </div>
                         </div>
                     </form>

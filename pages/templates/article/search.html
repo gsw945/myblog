@@ -1,1 +1,6 @@
 {% extends "base-layout.html" %}
+{% load static %}
+
+{% block head_css %}
+    <link href="{% static 'css/search.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}

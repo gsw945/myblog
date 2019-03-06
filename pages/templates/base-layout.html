@@ -49,12 +49,24 @@
 
     <script src="{% static 'libs/jquery/1.12.4/jquery.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js' %}" type="text/javascript"></script>
-    {% block footer_js %}
     <script type="text/javascript">
+        if(!window.GLOGAL) {
+            window.GLOGAL = {}
+        }
+        // 当前页面路由名称
+        GLOGAL.PAGE_VIEW_NAME = '{{ request.resolver_match.view_name }}';
+
         $(document).ready(function() {
-            ;
+            // 高亮当前页面菜单
+            var $current = $('li[data-page-view="' + GLOGAL.PAGE_VIEW_NAME + '"]');
+            if($current.length > 0) {
+                $current.addClass('active');
+                if($current.parent('ul').hasClass('dropdown-menu')) {
+                    $current.parents('li.dropdown').addClass('active');
+                }
+            }
         });
     </script>
-    {% endblock %}
+    {% block footer_js %}{% endblock %}
 </body>
 </html>
