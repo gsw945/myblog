@@ -158,7 +158,7 @@ MARTOR_ENABLE_LABEL = False
 # "replace" - Replace all HTML blocks with the text assigned to html_replacement_text
 # "remove" - All raw HTML will be completely stripped from the text with no warning to the author.
 # "escape" - All raw HTML will be escaped and included in the document.
-MARTOR_MARKDOWN_SAFE_MODE = True # default
+MARTOR_MARKDOWN_SAFE_MODE = False # default
 
 # Markdownify
 MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify' # default

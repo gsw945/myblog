@@ -2,10 +2,19 @@ from django.db import models
 
 # Create your models here.
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from martor.views import MARTOR_MARKDOWNIFY_FUNCTION, import_string
+from bs4 import BeautifulSoup
+from bs4 import Comment
+
+
+markdownify = import_string(MARTOR_MARKDOWNIFY_FUNCTION)
 
 class Article(models.Model):
     title = models.CharField('标题', max_length=200)
-    content = models.TextField(verbose_name='内容')
+    content = models.TextField(verbose_name='内容', default=None, blank=True, null=True)
+    abstract = models.TextField(verbose_name='摘要', default=None, blank=True, null=True)
     create_time = models.DateTimeField('创建时间', default=timezone.now)
     upate_time = models.DateTimeField('最后修改时间', auto_now=True)
     tags = models.ManyToManyField('Tag', through='ArticleTags')
@@ -17,6 +26,19 @@ class Article(models.Model):
         verbose_name = '文章'
         verbose_name_plural = '文章'
         app_label = 'pages'
+
+@receiver(post_save, sender=Article, dispatch_uid="update_article_abstract")
+def update_article_abstract(sender, instance, **kwargs):
+    abstract = markdownify(instance.content)
+    soup = BeautifulSoup(abstract, "html.parser")
+    exclude_tags = ['style', 'script', 'code']
+    for tag in soup(exclude_tags):
+        tag.decompose()
+    # abstract = soup.get_text() # 方式一（存在多余空白字符）
+    abstract = ' '.join(soup.stripped_strings) # 方式一
+    abstract = abstract[:100]
+    # 保存，但是不触发 post_save 信号
+    Article.objects.filter(id=instance.id).update(abstract=abstract)
 
 class Tag(models.Model):
     name = models.CharField('标签名', max_length=30)
