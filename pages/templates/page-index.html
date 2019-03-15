@@ -2,5 +2,20 @@
 {% load static %}
 
 {% block head_css %}
+    {{ block.super }}
     <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        #page-main {
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12 col-md-12 text-center">
+            <div id="page-main">
+                页面待开发中
+            </div>
+        </div>
+    </div>
 {% endblock %}

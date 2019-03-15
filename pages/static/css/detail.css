@@ -74,3 +74,28 @@
 .blog-content pre .hljs {
     border-radius: 3px;
 }
+
+@media(min-width: 768px) {
+    .main-right-part {
+        padding-top: 55px;
+    }
+    .calendar-panel {
+        margin-right: -7px;
+        margin-left: 7px;
+    }
+}
+@media(max-width: 767px) {
+    .main-right-part {
+        padding-top: 12px;
+    }
+}
+.calendar-panel {
+    opacity: 0.05;
+}
+.calendar-panel .panel-heading {
+    padding: 2px 5px 4px 12px;
+}
+.calendar-panel .panel-body {
+    padding: 10px;
+    padding-top: 2px;
+}

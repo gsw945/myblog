@@ -25,6 +25,15 @@
             <span class="text-muted">没有添加标签</span>
         {% endfor %}
     </div>
+    <div>
+        <i class="fas fa-eye"></i> 100
+        <i class="far fa-thumbs-up"></i> 5
+        <i class="far fa-thumbs-down"></i> 3
+        <i class="far fa-comments"></i> 3
+        <i class="far fa-comment"></i> 3
+        <i class="far fa-comment-dots"></i> 3
+        <i class="far fa-comment-alt"></i> 3
+    </div>
     <div class="blog-siblings">
         <div>
         上一篇:
@@ -50,15 +59,24 @@
 {% endblock %}
 
 {% block content_right %}
-<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
-    right panel
-</div>
+<div class="panel panel-default calendar-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">寸金难买寸光阴</h3>
+        </div>
+        <div class="panel-body">
+            <div class="arab-datetime">&nbsp;</div>
+            <div class="lunar-datetime">&nbsp;</div>
+            <div class="almanac-datetime">&nbsp;</div>
+            <div class="calendar-box">&nbsp;</div>
+      </div>
+    </div>
 {% endblock %}
 
 {% block footer_js %}
     <script src="{% static 'libs/marked/0.6.1/marked.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'libs/highlight.js/9.15.6/highlight.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'libs/highlightjs-line-numbers.js/2.6.0/highlightjs-line-numbers.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'libs/lunar-calendar/LunarCalendar.min.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         /**
          * HTML转义
@@ -76,7 +94,90 @@
             });
         }
 
+        /**
+         * 时间戳转字符串时间(YYYY-MM-dd HH:mm:ss)
+         * @param timestamp 时间戳(单位秒)
+         */
+        function ts2str(timestamp) {
+            var padLeftZero = function(num) {
+                return [(num <= 9) ? '0' : '', num].join('');
+            };
+            timestamp = Number(timestamp) * 1000;
+            var dt = new Date(timestamp);
+            return [
+                dt.getFullYear(),
+                padLeftZero(dt.getMonth() + 1),
+                padLeftZero(dt.getDate())
+            ].join('-') + ' ' +
+            [
+                padLeftZero(dt.getHours()),
+                padLeftZero(dt.getMinutes()),
+                padLeftZero(dt.getSeconds())
+            ].join(':');
+        }
+
+        /**
+         * 获取日历信息
+         */
+        function calendar_info() {
+            var $container = $('.main-right-part .calendar-panel .panel-body');
+            var current = new Date();
+            var ts = parseInt(current.getTime() / 1000);
+            var weekList = ['日','一','二','三','四','五','六'];
+            // console.log(ts2str(ts));
+            $container.find('.arab-datetime').html('<span>' + ts2str(ts) + '</span>');
+            var inited = $container.prop('data-inited');
+            var is_zero_datetime = (current.getHours() + current.getMinutes() + current.getSeconds()) == 0;
+            if(!inited || is_zero_datetime) {
+                var calendar = LunarCalendar.calendar(current.getFullYear(), current.getMonth() + 1, true);
+                var today = calendar.monthData[current.getDate() - 1];
+                var weekday = current.getDay();
+                var lunar = '农历' + today.lunarMonthName + today.lunarDayName + ' 星期' + weekList[weekday];
+                var almanac = today.GanZhiYear + '[' + today.zodiac + ']年 ' + today.GanZhiMonth + '月 ' + today.GanZhiDay + '日'
+                // console.log(lunar);
+                // console.log(almanac);
+                $container.find('.lunar-datetime').html('<span>' + lunar + '</span>');
+                $container.find('.almanac-datetime').html('<span>' + almanac + '</span>');
+                var $box = $container.find('.calendar-box');
+                generate_calendar($box, calendar, today, current, weekList);
+            }
+            if(!inited) {
+                $container.prop('data-inited', true);
+                $container.parent().animate({
+                    opacity: 1,
+                }, 2020);
+            }
+            // console.log('------------------------------')
+        }
+
+        /**
+         * 生成日历信息
+         */
+        function generate_calendar($box, calendar, today_data, current, weekList) {
+            // 日历为6行，如果当前月的第一天是周一，需要显示前一个月的最后一周
+            if(calendar.firstDay == 0) {
+                var prev_year = today.year;
+                var prev_month = today.month - 1;
+                if(prev_month == 0) {
+                    prev_month = 12;
+                    prev_year -= 1;
+                }
+                var prev_data = LunarCalendar.calendar(prev_year, prev_month, false).monthData.slice(-7);
+                for (var i = prev_data.length; i > 0; i--) {
+                    calendar.monthData.unshift(prev_data[i]);
+                }
+                calendar.monthData.splice(-7, 7);
+                calendar.firstDay = 7;
+            }
+            // TODO: 绘制日历
+            // console.log(calendar);
+            // console.log(today_data);
+            // console.log(current);
+            // console.log(weekList);
+        }
+
         $(document).ready(function() {
+            setInterval(calendar_info, 1000);
             // 移除加载层
             $('.loading-wrapper').remove();
             // 配置 highlightjs
