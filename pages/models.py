@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist
 from martor.views import MARTOR_MARKDOWNIFY_FUNCTION, import_string
 from bs4 import BeautifulSoup
 from bs4 import Comment
@@ -26,6 +27,21 @@ class Article(models.Model):
         verbose_name = '文章'
         verbose_name_plural = '文章'
         app_label = 'pages'
+
+    @property
+    def next_article(self):
+        try:
+            return self.__class__.get_next_by_create_time(self)
+        except ObjectDoesNotExist:
+            return None
+
+    @property
+    def previous_article(self):
+        try:
+            return self.__class__.get_previous_by_create_time(self)
+        except ObjectDoesNotExist:
+            return None
+
 
 @receiver(post_save, sender=Article, dispatch_uid="update_article_abstract")
 def update_article_abstract(sender, instance, **kwargs):

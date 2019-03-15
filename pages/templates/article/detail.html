@@ -15,14 +15,37 @@
     <div class="blog-content">
         <!-- 网络不好时，loading占位 -->
         {% include "widgets/loading-html.html" with loading_text='博文加载中' %}
-        <script type="text/x-markdown" id="article-markdown">{{ article.content|safe }}</script>
+        <script type="text/x-markdown" id="article-markdown">{{ article.content }}</script>
     </div>
     <div class="blog-tags">
+        标签: 
         {% for tag in article.tags.all %}
             <span class="tag-wrapper"><i class="fas fa-tag"></i> {{ tag.name }}</span>
         {% empty %}
-            <span>没有添加标签</span>
+            <span class="text-muted">没有添加标签</span>
         {% endfor %}
+    </div>
+    <div class="blog-siblings">
+        <div>
+        上一篇:
+        {% with article.previous_article as apa %}
+            {% if not apa %}
+            <span class="text-muted">没有了</span>
+            {% else %}
+                <a href="{% url 'pages:detail' apa.id %}">{{ apa.title }}</a>
+            {% endif %}
+        {% endwith %}
+        </div>
+        <div>
+        下一篇:
+        {% with article.next_article as ana %}
+            {% if not ana %}
+            <span class="text-muted">没有了</span>
+            {% else %}
+                <a href="{% url 'pages:detail' ana.id %}">{{ ana.title }}</a>
+            {% endif %}
+        {% endwith %}
+        </div>
     </div>
 {% endblock %}
 
@@ -81,6 +104,8 @@
             });
             // 获取markdown源码
             var source = $('#article-markdown').html();
+            // HTML解码(django模板会进行HTML编码)
+            source = $("<div/>").html(source).text();
             // 将markdown源码转为HTML，并更新到页面上
             $('.blog-content').html(marked(source));
             $('code.hljs').each(function(i, block) {

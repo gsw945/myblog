@@ -47,4 +47,9 @@ a:hover {
     .col-lg-2.main-right-part {
         width: 24.3%;
     }
+    body > .container-fluid {
+        width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
