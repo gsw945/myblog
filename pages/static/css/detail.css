@@ -96,8 +96,7 @@
     padding: 2px 5px 4px 12px;
 }
 .calendar-panel .panel-body {
-    padding: 10px;
-    padding-top: 2px;
+    padding: 8px;
 }
 
 .fas.fa-tag {
@@ -136,4 +135,46 @@
 .blog-content h4:first-child,
 .blog-content h5:first-child {
     margin-top: 0;
+}
+
+.arab-datetime,
+.lunar-datetime,
+.almanac-datetime {
+    margin-left: 14px;
+}
+
+.calendar-box {
+    display: inline-block;
+    padding: 2px 3px;
+    cursor: default;
+    border: 0 none;
+    border-top: 1px solid #eee;
+    margin-top: 8px;
+}
+.calendar-box .calendar-head {
+    display: block;
+}
+.calendar-box .calendar-week {
+    display: block;
+}
+.calendar-box .calendar-head .calendar-day,
+.calendar-box .calendar-week .calendar-day {
+    display: inline-block;
+    width: 26px;
+    height: 22px;
+    line-height: 16px;
+    text-align: right;
+    padding: 3px 5px 4px 4px;
+    border: 1px solid #fff;
+}
+.calendar-box .calendar-active {
+    color: #000;
+    font-weight: 500;
+}
+.calendar-box .calendar-today {
+    background-color: #efefef;
+    border-color: #ccc !important;
+}
+.calendar-box .calendar-overflow {
+    color: #777;
 }

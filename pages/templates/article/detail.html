@@ -153,7 +153,7 @@
             var is_zero_datetime = (current.getHours() + current.getMinutes() + current.getSeconds()) == 0;
             if(!inited || is_zero_datetime) {
                 var calendar = LunarCalendar.calendar(current.getFullYear(), current.getMonth() + 1, true);
-                var today = calendar.monthData[current.getDate() - 1];
+                var today = calendar.monthData[calendar.firstDay + current.getDate() - 1];
                 var weekday = current.getDay();
                 var lunar = '农历' + today.lunarMonthName + today.lunarDayName + ' 星期' + weekList[weekday];
                 var almanac = today.GanZhiYear + '[' + today.zodiac + ']年 ' + today.GanZhiMonth + '月 ' + today.GanZhiDay + '日'
@@ -168,7 +168,7 @@
                 $container.prop('data-inited', true);
                 $container.parent().animate({
                     opacity: 1,
-                }, 2020);
+                }, 1567);
             }
             // console.log('------------------------------')
         }
@@ -177,6 +177,7 @@
          * 生成日历信息
          */
         function generate_calendar($box, calendar, today_data, current, weekList) {
+            $box.empty();
             // 日历为6行，如果当前月的第一天是周一，需要显示前一个月的最后一周
             if(calendar.firstDay == 0) {
                 var prev_year = today.year;
@@ -192,6 +193,52 @@
                 calendar.monthData.splice(-7, 7);
                 calendar.firstDay = 7;
             }
+            $box.data('data-calendar', calendar);
+            // 日历头
+            var $head_line = $('<div class="calendar-head"></div>');
+            for (var i = 0; i < weekList.length; i++) {
+                $head_line.append([
+                    '<span class="calendar-day">',
+                        weekList[i],
+                    '</span>'
+                ].join(''));
+            }
+            $box.append($head_line);
+            var today_idx; // 今天索引
+            // 生成日历6行7列的日期
+            for (var row = 0; row < 6; row++) {
+                var $line = $('<div class="calendar-week"></div>');
+                for (var col = 0; col < 7; col++) {
+                    var idx = row * 7 + col;
+                    // 某一天的数据
+                    var day_data = calendar.monthData[idx];
+                    $line.append([
+                        '<span class="calendar-day" data-idx="', idx, '">',
+                            day_data.day,
+                        '</span>'
+                    ].join(''));
+                    if(day_data.day == today_data.day) {
+                        today_idx = idx;
+                    }
+                }
+                $box.append($line);
+            }
+            // 今天
+            $box.find('span.calendar-day[data-idx="' + today_idx + '"]').addClass('calendar-today');
+            var idx_max = calendar.firstDay - 1 + calendar.monthDays;
+            for (var i = 0; i < calendar.monthData.length; i++) {
+                var $cell = $box.find('span.calendar-day[data-idx="' + i + '"]');
+                if(i >= calendar.firstDay && i <= idx_max) {
+                    console.log(calendar.monthData[i]);
+                    $cell.addClass('calendar-active');
+                }
+                else {
+                    $cell.addClass('calendar-overflow');
+                }
+            }
+            window.today_data = today_data;
+            window.calendar = calendar;
+            // debugger;
             // TODO: 绘制日历
             // console.log(calendar);
             // console.log(today_data);
