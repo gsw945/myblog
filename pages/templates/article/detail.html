@@ -10,32 +10,51 @@
 
 {% block content_left %}
     <div class="blog-title">
-        <h2>{{ article.title }}</h2>
+        <h2>
+            {{ article.title }}
+            {% if user.is_authenticated %}
+            <span class="ico-btn-edit">
+                <a href="/admin/pages/article/{{ article.id }}/change/" title="编辑">
+                    <i class="far fa-edit"></i>
+                </a>
+            </span>
+            {% endif %}
+        </h2>
     </div>
     <div class="blog-content">
         <!-- 网络不好时，loading占位 -->
         {% include "widgets/loading-html.html" with loading_text='博文加载中' %}
         <script type="text/x-markdown" id="article-markdown">{{ article.content }}</script>
     </div>
-    <div class="blog-tags">
-        标签: 
-        {% for tag in article.tags.all %}
-            <span class="tag-wrapper"><i class="fas fa-tag"></i> {{ tag.name }}</span>
-        {% empty %}
-            <span class="text-muted">没有添加标签</span>
-        {% endfor %}
+    <div class="row">
+        <div class="col-md-6 blog-tags">
+            标签: 
+            {% for tag in article.tags.all %}
+                <span class="tag-wrapper"><i class="fas fa-tag"></i> {{ tag.name }}</span>
+            {% empty %}
+                <span class="text-muted">没有添加标签</span>
+            {% endfor %}
+        </div>
+        <div class="col-md-6 text-right">
+            <i class="fas fa-eye"></i> 100
+            <i class="far fa-thumbs-up"></i> 5
+            <i class="far fa-thumbs-down"></i> 3
+            <i class="far fa-comments"></i> 3
+            <i class="far fa-comment"></i> 3
+            <i class="far fa-comment-dots"></i> 3
+            <i class="far fa-comment-alt"></i> 3
+        </div>
     </div>
-    <div>
-        <i class="fas fa-eye"></i> 100
-        <i class="far fa-thumbs-up"></i> 5
-        <i class="far fa-thumbs-down"></i> 3
-        <i class="far fa-comments"></i> 3
-        <i class="far fa-comment"></i> 3
-        <i class="far fa-comment-dots"></i> 3
-        <i class="far fa-comment-alt"></i> 3
+    <div class="row">
+        <div class="col-xs-6">
+            首发 {{ article.create_time }}
+        </div>
+        <div class="col-xs-6 text-right">
+            {{ article.upate_time }} 更新
+        </div>
     </div>
-    <div class="blog-siblings">
-        <div>
+    <div class="row blog-siblings">
+        <div class="col-xs-6">
         上一篇:
         {% with article.previous_article as apa %}
             {% if not apa %}
@@ -45,7 +64,7 @@
             {% endif %}
         {% endwith %}
         </div>
-        <div>
+        <div class="col-xs-6 text-right">
         下一篇:
         {% with article.next_article as ana %}
             {% if not ana %}
