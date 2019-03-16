@@ -1,6 +1,8 @@
 {% extends "base-layout.html" %}
 {% load static %}
 
+{% block title %}博文列表 - {{ block.super }}{% endblock %}
+
 {% block head_css %}
     <link href="{% static 'css/list.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
@@ -13,7 +15,7 @@
                     <a href="{% url 'pages:detail' article.id %}">{{ article.title }}</a>
                     {% if user.is_authenticated %}
                     <span class="ico-btn-edit">
-                        <a href="/admin/pages/article/{{ article.id }}/change/" title="编辑">
+                        <a href="{% url 'admin:pages_article_change' article.id %}" title="编辑">
                             <i class="far fa-edit"></i>
                         </a>
                     </span>
@@ -24,9 +26,11 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-6">
                             {% for tag in article.tags.all %}
-                                <span class="tag-wrapper"><i class="fas fa-tag"></i> {{ tag.name }}</span>
+                                <a href="{% url 'pages:search' %}?tag={{ tag.id }}" class="tag-item">
+                                    <span class="tag-wrapper"><i class="fas fa-tag"></i>{{ tag.name }}</span>
+                                </a>
                             {% empty %}
-                                <span>没有添加标签</span>
+                                <span class="text-muted">没有添加标签</span>
                             {% endfor %}
                         </div>
                         <div class="col-xs-12 col-sm-6 text-right">
@@ -66,7 +70,7 @@
         </div>
         <div class="panel-body">
             {% for tag in tag_list %}
-                <a href="#" class="tag-item">
+                <a href="{% url 'pages:search' %}?tag={{ tag.id }}" class="tag-item">
                     <span class="tag-text">{{ tag.name }}</span>
                     <span class="badge">{{ tag.articles.count }}</span>
                 </a>

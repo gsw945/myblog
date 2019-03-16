@@ -80,6 +80,12 @@
 .list-group-item-footing {
     padding-top: 5px;
 }
+.list-group-item-footing a.tag-item:not(:hover) {
+    color: #7d7d7d;
+}
+.list-group-item-footing a.tag-item:hover {
+    color: #000;
+}
 .blog-list-pagination {
     margin: auto 36px;
 }
@@ -91,4 +97,7 @@
 
 .tag-wrapper + .tag-wrapper {
     margin-left: 0.6em;
+}
+.tag-wrapper .fa-tag {
+    margin-right: 0.1em;
 }

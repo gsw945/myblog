@@ -100,9 +100,27 @@
     padding-top: 2px;
 }
 
+.fas.fa-tag {
+    vertical-align: middle;
+    font-size: 0.2em;
+}
+
 .blog-tags + div > i[class*="fa-"] {
     margin-left: 0.8em;
 }
+.blog-tags a.tag-item:not(:hover) {
+    color: #5d5d5d;
+}
+.blog-tags a.tag-item:hover {
+    color: #000;
+}
+.tag-item:not(:last-of-type) {
+    margin-right: 5px;
+}
+.tag-wrapper .fa-tag {
+    margin-right: 0.1em;
+}
+
 .blog-title .ico-btn-edit {
     position: absolute;
     right: 10px;

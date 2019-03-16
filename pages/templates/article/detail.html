@@ -1,6 +1,8 @@
 {% extends "base-layout.html" %}
 {% load static %}
 
+{% block title %}{{ article.title }} - {{ block.super }}{% endblock %}
+
 {% block head_css %}
     {% include "widgets/loading-style.html" %}
     <link href="{% static 'css/detail.css' %}" rel="stylesheet" type="text/css" />
@@ -14,7 +16,7 @@
             {{ article.title }}
             {% if user.is_authenticated %}
             <span class="ico-btn-edit">
-                <a href="/admin/pages/article/{{ article.id }}/change/" title="编辑">
+                <a href="{% url 'admin:pages_article_change' article.id %}" title="编辑">
                     <i class="far fa-edit"></i>
                 </a>
             </span>
@@ -30,7 +32,9 @@
         <div class="col-md-6 blog-tags">
             标签: 
             {% for tag in article.tags.all %}
-                <span class="tag-wrapper"><i class="fas fa-tag"></i> {{ tag.name }}</span>
+                <a href="{% url 'pages:search' %}?tag={{ tag.id }}" class="tag-item">
+                    <span class="tag-wrapper"><i class="fas fa-tag"></i>{{ tag.name }}</span>
+                </a>
             {% empty %}
                 <span class="text-muted">没有添加标签</span>
             {% endfor %}

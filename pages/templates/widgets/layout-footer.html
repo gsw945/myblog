@@ -1,8 +1,12 @@
 <div class="row page-footer">
     <p class="text-center">
-        <strong><a href="javascript;:">XYZ</a> © {% now "Y" %}</strong> <small>保留所有权利</small>
+        <strong>
+            <a href="{% url 'pages:about' %}">{{ CFG.SITE_INFO.COPYRIGHT|default:CFG.SITE_INFO.WHOAMI }}</a>
+            © {% now "Y" %}
+        </strong>
+        <small>保留所有权利</small>
     </p>
     <p class="text-center">
-        <a href="http://www.miitbeian.gov.cn/" target="_blank">渝ICP备*****号-1 </a>
+        <a href="http://www.miitbeian.gov.cn/" target="_blank">{{ CFG.SITE_INFO.ICP }}</a>
     </p>
 </div>

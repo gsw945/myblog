@@ -25,15 +25,16 @@ SECRET_KEY = 'de6x6i!%w0n#0urcwanj&%+t41i@m^y!0=n23cl*4zo#0u&9&q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
-from socket import gethostname, gethostbyname
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    gethostname(),
-    gethostbyname(gethostname())
-]
-print(ALLOWED_HOSTS)
+ALLOWED_HOSTS = []
+if DEBUG:
+    from socket import gethostname, gethostbyname
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'localhost',
+        gethostname(),
+        gethostbyname(gethostname())
+    ]
+    print(ALLOWED_HOSTS)
 
 
 # Application definition
@@ -72,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -205,3 +207,16 @@ MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
 # 250MB - 214958080
 # 500MB - 429916160
 MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
+
+# 站点信息
+SITE_INFO = {
+    'ICP': '鄂ICP备*****号-1',
+    'BRAND': '好记性<small>不如</small><strong>烂笔头</strong>',
+    'TITLE': '博客',
+    'COPYRIGHT': '玖亖伍•博客',
+    'WHOAMI': '玖亖伍'
+}
+# settings.py中可以导出(到模板中)的变量
+SETTINGS_EXPORT = ['SITE_INFO']
+# settings.py在模板中使用的别名(默认为'settings')
+SETTINGS_EXPORT_VARIABLE_NAME = 'CFG'

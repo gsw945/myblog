@@ -1,6 +1,8 @@
 {% extends "base-layout.html" %}
 {% load static %}
 
+{% block title %}博文搜索 - {{ block.super }}{% endblock %}
+
 {% block head_css %}
     {{ block.super }}
     <link href="{% static 'css/search.css' %}" rel="stylesheet" type="text/css" />

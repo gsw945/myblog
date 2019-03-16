@@ -1,5 +1,7 @@
 {% extends "base-layout.html" %}
 
+{% block title %}关于[{{ CFG.SITE_INFO.WHOAMI }}] - {{ block.super }}{% endblock %}
+
 {% block head_css %}
     {{ block.super }}
     <style type="text/css">

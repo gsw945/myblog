@@ -7,13 +7,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'pages:index' %}">
-                好记性<small>不如</small><strong>烂笔头</strong>
-            </a>
+            <a class="navbar-brand" href="{% url 'pages:index' %}">{{ CFG.SITE_INFO.BRAND|safe }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li data-page-view="pages:list"><a href="{% url 'pages:list' %}">博文列表</a></li>
+                {% if user.is_authenticated %}
+                    <li data-page-view="admin:pages_article_add"><a href="{% url 'admin:pages_article_add' %}">去写博客</a></li>
+                {% endif %}
+                <li data-page-view="pages:list"><a href="{% url 'pages:list' %}"><strong>博文列表</strong></a></li>
                 <li data-page-view="pages:copyright"><a href="{% url 'pages:copyright' %}">版权声明</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -27,7 +28,7 @@
                 </li>
                 <li class="top-nav-search">
                     <!-- <input type="text" name="txt-search" placeholder="search" /> -->
-                    <form action="/search/" id="header-search" class="navbar-form" role="search">
+                    <form action="{% url 'pages:search' %}" id="header-search" class="navbar-form" role="search">
                         <div class="form-group">
                             <div class="input-group-container header-search">
                                 <span class="input-group-container-addon">
