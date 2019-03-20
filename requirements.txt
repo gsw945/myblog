@@ -2,3 +2,5 @@ django<=2.0.9
 martor
 beautifulsoup4
 django-settings-export
+django-ipware
+django-ratelimit

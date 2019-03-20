@@ -5,7 +5,7 @@ from django.db import models
 from martor.widgets import AdminMartorWidget
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Article, Tag, ArticleTags
+from .models import Article, Tag, ArticleTags, ArticleAnalysis
 
 
 class TagsInlineAdmin(admin.StackedInline):
@@ -44,6 +44,14 @@ class ArticleAdmin(admin.ModelAdmin):
             ]
         return super(ArticleAdmin, self).get_fieldsets(request, obj=obj)
 
+class ArticleAnalysisAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['article', 'client_ip', 'is_routable', 'access_time']}),
+    ]
+    readonly_fields = ['article', 'client_ip', 'is_routable', 'access_time'] # 只读字段
+    list_display = ['article', 'client_ip', 'is_routable', 'access_time'] # 列表显示字段
+
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Tag)
+admin.site.register(ArticleAnalysis, ArticleAnalysisAdmin)
 # admin.site.register(ArticleTags)

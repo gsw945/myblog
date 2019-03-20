@@ -23,6 +23,8 @@
 </head>
 <body>
     {% include "widgets/top-nav.html" %}
+    
+    {% csrf_token %}
 
     <div class="container">
         {% block content %}
@@ -56,7 +58,18 @@
         // 当前页面路由名称
         GLOGAL.PAGE_VIEW_NAME = '{{ request.resolver_match.view_name }}';
 
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return ((/^(GET|HEAD|OPTIONS|TRACE)$/).test(method));
+        }
         $(document).ready(function() {
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", $('input[name="csrfmiddlewaretoken"]').val());
+                    }
+                }
+            });
             // 高亮当前页面菜单
             var $current = $('li[data-page-view="' + GLOGAL.PAGE_VIEW_NAME + '"]');
             if($current.length > 0) {

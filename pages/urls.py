@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import apis
 
 app_name = 'pages'
 urlpatterns = [
@@ -11,4 +12,5 @@ urlpatterns = [
     path('about/', views.view_about, name='about'),
     path('message/', views.view_message, name='message'),
     path('search/', views.view_search, name='search'),
+    path('analysis/article/', apis.api_article_analysis, name='article_analysis'),
 ]

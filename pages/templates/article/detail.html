@@ -40,7 +40,7 @@
             {% endfor %}
         </div>
         <div class="col-md-6 text-right">
-            <i class="fas fa-eye"></i> 100
+            <i class="fas fa-eye"></i> {{ article.analysis_count }}
             <i class="far fa-thumbs-up"></i> 5
             <i class="far fa-thumbs-down"></i> 3
             <i class="far fa-comments"></i> 3
@@ -100,6 +100,11 @@
     <script src="{% static 'libs/highlight.js/9.15.6/highlight.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'libs/highlightjs-line-numbers.js/2.6.0/highlightjs-line-numbers.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'libs/lunar-calendar/LunarCalendar.min.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        // 模板变量
+        GLOGAL.ARTICLE_ID = {{ article.id }};
+        GLOGAL.ARTICLE_ANALYSIS_URL = "{% url 'pages:article_analysis' %}";
+    </script>
     <script type="text/javascript">
         /**
          * HTML转义
@@ -229,7 +234,7 @@
             for (var i = 0; i < calendar.monthData.length; i++) {
                 var $cell = $box.find('span.calendar-day[data-idx="' + i + '"]');
                 if(i >= calendar.firstDay && i <= idx_max) {
-                    console.log(calendar.monthData[i]);
+                    // console.log(calendar.monthData[i]);
                     $cell.addClass('calendar-active');
                 }
                 else {
@@ -246,7 +251,28 @@
             // console.log(weekList);
         }
 
+        /**
+         * 访问统计
+         */
+        function article_analysis() {
+            $.ajax({
+                url: GLOGAL.ARTICLE_ANALYSIS_URL,
+                type: 'POST',
+                data: {
+                    article: GLOGAL.ARTICLE_ID
+                },
+                dataType: 'json'
+            }).done(function(resp) {
+                console.log(resp)
+            }).fail(function(err) {
+                console.error(err);
+            });
+        }
+
         $(document).ready(function() {
+            // 博客访问统计(延时1.2秒，过滤掉无效访问)
+            setTimeout(article_analysis, 1200);
+            // 显示日历
             setInterval(calendar_info, 1000);
             // 移除加载层
             $('.loading-wrapper').remove();

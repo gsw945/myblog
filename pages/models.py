@@ -19,7 +19,7 @@ class Article(models.Model):
     create_time = models.DateTimeField('创建时间', default=timezone.now)
     upate_time = models.DateTimeField('最后修改时间', auto_now=True)
     tags = models.ManyToManyField('Tag', through='ArticleTags')
-
+    
     def __str__(self):
         return self.title
 
@@ -42,6 +42,9 @@ class Article(models.Model):
         except ObjectDoesNotExist:
             return None
 
+    @property
+    def analysis_count(self):
+        return self.articleanalysis_set.count()
 
 @receiver(post_save, sender=Article, dispatch_uid="update_article_abstract")
 def update_article_abstract(sender, instance, **kwargs):
@@ -78,4 +81,18 @@ class ArticleTags(models.Model):
     class Meta:
         verbose_name = '文章标签'
         verbose_name_plural = '文章标签'
+        app_label = 'pages'
+
+class ArticleAnalysis(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    client_ip = models.CharField('访问者IP', max_length=255)
+    is_routable = models.BooleanField('是否是可路由')
+    access_time = models.DateTimeField('访问时间', default=timezone.now)
+
+    def __str__(self):
+        return '{0}[{1}]'.format(self.article.title, self.client_ip)
+
+    class Meta:
+        verbose_name = '文章访问统计'
+        verbose_name_plural = '文章访问统计'
         app_label = 'pages'

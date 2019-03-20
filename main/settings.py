@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 if DEBUG:
     from socket import gethostname, gethostbyname
     ALLOWED_HOSTS = [
+        'test.wx.gsw945.com',
         '127.0.0.1',
         'localhost',
         gethostname(),
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main.middlewares.AnalysisMiddleware',
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -74,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django_settings_export.settings_export',
+                'main.context_processors.request_urls',
             ],
         },
     },
