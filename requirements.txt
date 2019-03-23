@@ -4,3 +4,6 @@ beautifulsoup4
 django-settings-export
 django-ipware
 django-ratelimit
+Pillow
+matplotlib
+fontTools
