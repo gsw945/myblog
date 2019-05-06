@@ -96,3 +96,17 @@ class ArticleAnalysis(models.Model):
         verbose_name = '文章访问统计'
         verbose_name_plural = '文章访问统计'
         app_label = 'pages'
+
+class Message(models.Model):
+    email = models.CharField(verbose_name='邮箱', max_length=220)
+    content = models.TextField(verbose_name='内容', default=None, blank=True, null=True)
+    reply = models.BooleanField(verbose_name='期待回复', default=False)
+    create_time = models.DateTimeField(verbose_name='创建时间', default=timezone.now)
+    
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        verbose_name = '留言'
+        verbose_name_plural = '留言'
+        app_label = 'pages'

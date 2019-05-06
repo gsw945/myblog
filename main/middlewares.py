@@ -48,6 +48,6 @@ class AnalysisMiddleware(MiddlewareMixin):
             'x_requested_with': x_requested_with,
             'dt_str': dt_str
         }
-        print(info)
+        # print(info)
 
         return response
