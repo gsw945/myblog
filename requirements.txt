@@ -1,4 +1,4 @@
-django<=2.0.13
+django
 martor
 beautifulsoup4
 django-settings-export
