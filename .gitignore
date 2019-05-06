@@ -3,4 +3,6 @@ __pycache__/
 db.sqlite3
 media/*
 static/*
+!pages/static/*
 !media/.gitkeep
+cache/*
