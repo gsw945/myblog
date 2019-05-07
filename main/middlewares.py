@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime, timedelta
 
 from django.utils.deprecation import MiddlewareMixin
+from django.apps import apps
 
 
 class AnalysisMiddleware(MiddlewareMixin):
@@ -49,5 +50,8 @@ class AnalysisMiddleware(MiddlewareMixin):
             'dt_str': dt_str
         }
         # print(info)
+        AccessAnalysis = apps.get_model('pages', 'AccessAnalysis')
+        obj = AccessAnalysis(**info)
+        obj.save()
 
         return response

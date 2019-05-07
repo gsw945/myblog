@@ -6,7 +6,9 @@ from martor.widgets import AdminMartorWidget
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .models import Article, Tag, ArticleTags, ArticleAnalysis, Message
+from .models import (
+    Article, Tag, ArticleTags, ArticleAnalysis, Message, AccessAnalysis
+)
 
 
 class TagsInlineAdmin(admin.StackedInline):
@@ -63,3 +65,18 @@ class MessageAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ['email', 'reply', 'create_time'] # 只读字段
 admin.site.register(Message, MessageAdmin)
+
+class AccessAnalysisAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': [
+            'regular', 'uid', 'method', 'url', 'referer', 'remote_addr', 'x_real_ip',
+            'x_forwarded_for', 'accept_language', 'host', 'remote_host', 'remote_user',
+            'user_agent', 'x_requested_with', 'dt_str', 'access_time'
+        ]}),
+    ]
+    readonly_fields = [
+        'regular', 'uid', 'method', 'url', 'referer', 'remote_addr', 'x_real_ip',
+        'x_forwarded_for', 'accept_language', 'host', 'remote_host', 'remote_user',
+        'user_agent', 'x_requested_with', 'dt_str', 'access_time'
+    ] # 只读字段
+admin.site.register(AccessAnalysis, AccessAnalysisAdmin)

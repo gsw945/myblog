@@ -110,3 +110,30 @@ class Message(models.Model):
         verbose_name = '留言'
         verbose_name_plural = '留言'
         app_label = 'pages'
+
+
+class AccessAnalysis(models.Model):
+    regular = models.BooleanField('是否是回头客', default=False)
+    uid = models.CharField('访问者ID', max_length=32)
+    method = models.CharField('HTTP方法', max_length=16)
+    url = models.TextField('访问的URL', blank=False, null=False)
+    referer = models.TextField('访问来源页面URL', default=None, blank=True, null=True)
+    remote_addr = models.CharField('访问者网络地址', max_length=255, default=None, blank=True, null=True)
+    x_real_ip = models.CharField('访问者真实IP', max_length=255, default=None, blank=True, null=True)
+    x_forwarded_for = models.CharField('访问者反向代理地址', max_length=255, default=None, blank=True, null=True)
+    accept_language = models.CharField('访问者语言', max_length=255, default=None, blank=True, null=True)
+    host = models.CharField('访问的站点主机', max_length=255, default=None, blank=True, null=True)
+    remote_host = models.CharField('访问者主机', max_length=255, default=None, blank=True, null=True)
+    remote_user = models.CharField('访问者用户', max_length=255, default=None, blank=True, null=True)
+    user_agent = models.CharField('访问者User-Agent标识', max_length=255, default=None, blank=True, null=True)
+    x_requested_with = models.CharField('XHR标识', max_length=64, default=None, blank=True, null=True)
+    dt_str = models.CharField('访问时间(字符串)', max_length=26, default=None, blank=True, null=True)
+    access_time = models.DateTimeField('访问时间', default=timezone.now)
+
+    def __str__(self):
+        return '{0}[{1}]'.format(self.remote_addr, self.uid)
+
+    class Meta:
+        verbose_name = '站点访问统计'
+        verbose_name_plural = '站点访问统计'
+        app_label = 'pages'
