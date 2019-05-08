@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'main.middlewares.AnalysisMiddleware',
+    # 'main.middlewares.AnalysisMiddleware', # 暂时停用站点访问统计
 ]
 
 ROOT_URLCONF = 'main.urls'

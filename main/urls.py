@@ -14,13 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path, reverse
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.templatetags.staticfiles import static as static_url
+from django.views.generic.base import RedirectView
 
 from .views import markdown_uploader
 
+favicon_view = RedirectView.as_view(url=static_url('favicon.ico'), permanent=True)
+robots_view = RedirectView.as_view(url=static_url('robots.txt'), permanent=True)
+
 urlpatterns = [
+    re_path(r'^favicon\.ico$', favicon_view),
+    re_path(r'^robots\.txt$', robots_view),
     path('', include('pages.urls')),
     path('admin/', admin.site.urls),
     path('martor/', include('martor.urls')),
