@@ -34,13 +34,18 @@ a:hover {
     height: 63px;
     width: 100%;
 }
+.page-footer a.github-icon {
+    position: relative;
+}
 .page-footer i.fa-github-square {
+    position: absolute;
+    left: 0.2em;
+    top: -0.1em;
     font-size: 1.8em;
-    margin-left: 0.2em;
     vertical-align: middle;
     color: #000;
 }
-.page-footer a:hover > i.fa-github-square {
+.page-footer a.github-icon:hover > i.fa-github-square {
     color: #0f3ff7;
 }
 
