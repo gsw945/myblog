@@ -28,6 +28,13 @@ class ArticleAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': AdminMartorWidget},
     }
+    search_fields = ['title', 'content']  # 搜索字段
+
+    def get_ordering(self, request):
+        '''重写排序'''
+        return [
+            '-upate_time'
+        ]
     
     # 访问地址
     def visit_link(self, obj):

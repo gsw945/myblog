@@ -101,3 +101,30 @@
 .tag-wrapper .fa-tag {
     margin-right: 0.1em;
 }
+
+.pager li.current > span {
+    border: 0 none;
+    border-radius: 0;
+}
+.pager li.current .bootstrap-select {
+    padding: 6px 8px;
+}
+.pager li.current .btn.dropdown-toggle {
+    padding: 1px 9px;
+    background-image: none;
+}
+.pager li.current .dropdown-menu.open {
+    padding: 0 0 5px 0;
+}
+.pager li.current .dropdown-menu.open .bs-searchbox {
+    padding: 3px 3px;
+}
+.pager li.current .dropdown-menu.open .bs-searchbox > input[type="text"] {
+    height: 25px;
+    padding: 4px 6px;
+}
+.pager li.current .dropdown-menu.inner a[role="option"] {
+    border-radius: 0;
+    display: block;
+    padding: 2px 8px;
+}

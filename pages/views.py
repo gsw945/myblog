@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from .models import Article, Tag
 
@@ -10,7 +11,10 @@ def view_index(request):
     return render(request, 'page-index.html', context)
 
 def view_list(request):
-    articles = Article.objects.all()
+    article_list = Article.objects.order_by('-upate_time').all()
+    paginator = Paginator(article_list, 15) # 每页显示15条
+    page = request.GET.get('page')
+    articles = paginator.get_page(page)
     tags = Tag.objects.all()
     context = {
         'article_list': articles,
