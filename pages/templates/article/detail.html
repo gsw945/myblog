@@ -8,7 +8,7 @@
     <link href="{% static 'css/detail.css' %}" rel="stylesheet" type="text/css" />
     <!-- <link href="{% static 'libs/highlight.js/9.15.6/styles/monokai-sublime.min.css' %}" rel="stylesheet" type="text/css" /> -->
     <link href="{% static 'libs/highlight.js/9.15.6/styles/xcode.min.css' %}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css" />
 {% endblock %}
 
 {% block content_left %}
@@ -112,7 +112,7 @@
     <script src="{% static 'libs/highlight.js/9.15.6/highlight.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'libs/highlightjs-line-numbers.js/2.6.0/highlightjs-line-numbers.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'libs/lunar-calendar/LunarCalendar.min.js' %}" type="text/javascript"></script>
-    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script src="https://cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
     <script type="text/javascript">
         // 模板变量
         GLOGAL.ARTICLE_ID = {{ article.id }};
@@ -341,16 +341,17 @@
             }
 
             // 评论系统
-            var gitment = new Gitment({
-                id: 'article-' + GLOGAL.ARTICLE_ID, // 页面 ID, 可选。默认为 location.href
-                owner: 'gsw945', // GitHub ID
-                repo: 'myblog', // 存储评论的 repo
-                oauth: {
-                    client_id: '416ff2d2cfa556e8f231', // client ID
-                    client_secret: '3a7ed3b563e1711e7a54e286da315a259c8e40e4', // client secret
-                }
+            var gitalk = new Gitalk({
+                clientID: '416ff2d2cfa556e8f231',
+                clientSecret: '3a7ed3b563e1711e7a54e286da315a259c8e40e4',
+                repo: 'myblog',
+                owner: 'gsw945',
+                admin: ['gsw945'],
+                // id: location.pathname,
+                id: 'article-' + GLOGAL.ARTICLE_ID,
+                distractionFreeMode: false
             });
-            gitment.render('comment-container')
+            gitalk.render('comment-container')
         });
     </script>
 {% endblock %}
