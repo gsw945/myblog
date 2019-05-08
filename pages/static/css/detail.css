@@ -104,8 +104,12 @@
     font-size: 0.2em;
 }
 
-.blog-tags + div > i[class*="fa-"] {
+.blog-tags + div > .ico-wrapper {
     margin-left: 0.8em;
+    cursor: pointer;
+}
+.blog-tags + div > .ico-wrapper:hover {
+    color: #a7b9ff;
 }
 .blog-tags a.tag-item:not(:hover) {
     color: #5d5d5d;

@@ -22,6 +22,10 @@ from django.views.generic.base import RedirectView
 
 from .views import markdown_uploader
 
+admin.site.site_header = '玖亖伍•管理'
+admin.site.index_title = '后台主页'
+admin.site.site_title = '管理后台'
+
 favicon_view = RedirectView.as_view(url=static_url('favicon.ico'), permanent=True)
 robots_view = RedirectView.as_view(url=static_url('robots.txt'), permanent=True)
 
