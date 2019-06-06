@@ -82,13 +82,13 @@ def api_article_analysis(request):
     return JsonResponse(ret)
 
 @ratelimit(key=ratelimit_key, rate='100/d', method=ratelimit.ALL, block=False)
-@ratelimit(key=ratelimit_key, rate='20/h', method=ratelimit.ALL, block=False)
-@ratelimit(key=ratelimit_key, rate='1/5s', method=ratelimit.ALL, block=False)
+@ratelimit(key=ratelimit_key, rate='30/h', method=ratelimit.ALL, block=False)
+@ratelimit(key=ratelimit_key, rate='1/3s', method=ratelimit.ALL, block=False)
 def api_generate_captcha(request):
     '''
     100/d: 每天100次限制
-    20/h: 每小时20次限制
-    1/5s: 每5秒一次限制
+    30/h: 每小时20次限制
+    1/3s: 每3秒一次限制
     '''
     # 是否被限制
     is_limited = getattr(request, 'limited', False)
@@ -108,9 +108,9 @@ def api_generate_captcha(request):
         }
     return JsonResponse(ret)
 
-# @ratelimit(key=ratelimit_key, rate='60/d', method=ratelimit.ALL, block=False)
-# @ratelimit(key=ratelimit_key, rate='12/h', method=ratelimit.ALL, block=False)
-# @ratelimit(key=ratelimit_key, rate='1/12s', method=ratelimit.ALL, block=False)
+@ratelimit(key=ratelimit_key, rate='60/d', method=ratelimit.ALL, block=False)
+@ratelimit(key=ratelimit_key, rate='12/h', method=ratelimit.ALL, block=False)
+@ratelimit(key=ratelimit_key, rate='1/12s', method=ratelimit.ALL, block=False)
 def api_leave_message(request):
     '''
     60/d: 每天60次限制

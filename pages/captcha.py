@@ -24,10 +24,12 @@ def char_in_font(unicode_char, ttf_font):
         )
     else:
         font = ttf_font
-    for cmap in font['cmap'].tables:
-        if cmap.isUnicode():
-            if ord(unicode_char) in cmap.cmap:
-                return True
+    cmap_tables = getattr(font['cmap'], 'tables', None)
+    if cmap_tables is not None:
+        for cmap in cmap_tables:
+            if cmap.isUnicode():
+                if ord(unicode_char) in cmap.cmap:
+                    return True
     return False
 
 def supported_fonts(char):
