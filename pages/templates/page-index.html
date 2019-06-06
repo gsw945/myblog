@@ -7,7 +7,72 @@
     {{ block.super }}
     <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css" />
     <style type="text/css">
+        .navbar.navbar-static-top {
+            margin-bottom: 0;
+        }
+        .page-main {
+            text-align: left;
+        }
+        #page-slogan {
+            padding: 6px 0 2px 0;
+        }
+        .slogan-text {
+            font-size: 1.23em;
+            font-weight: 500;
+            text-align: left;
+            text-indent: 1em;
+            color: #8dabd7;
+        }
         #page-main {
+            /*border: 1px solid #fa1;*/
+            display: flex;
+            flex-direction: row;
+        }
+        .sidebar {
+            flex-basis: 7em;
+            text-align: right;
+            display: inline-block;
+            background-color: #858fd8;
+            color: #fff;
+            border: 1px solid #ddd;
+            border-right-color: #fff;
+        }
+        .sidebar > ul {
+            padding: 0;
+        }
+        .sidebar > ul > li {
+            list-style: none;
+            padding: 4px 7px 5px 0;
+            cursor: default;
+        }
+        .sidebar > ul > li:not(.selected):hover {
+            color: #247ef3;
+            background-color: #f8f5ef;
+            cursor: pointer;
+        }
+        .sidebar > ul > li.selected {
+            color: #247ef3;
+            background-color: #f8f5ef;
+        }
+        .section-wrapper {
+            flex-basis: calc(100% - 7em - 0px);
+            display: inline-block;
+            background-color: #f8f5ef;
+            padding: 1px;
+            border: 1px solid #ddd;
+        }
+        .section-wrapper .item {
+            display: inline-block;
+            width: 14.6em;
+            height: 10em;
+            margin-bottom: 3px;
+        }
+        .section-wrapper .item:nth-of-type(2n+1) {
+            /*background-color: #ffe5b5;*/
+            background-color: #fff6e5;
+        }
+        .section-wrapper .item:nth-of-type(2n) {
+            background-color: #bfdbff;
         }
     </style>
 {% endblock %}
@@ -15,9 +80,67 @@
 {% block content %}
     <div class="row">
         <div class="col-xs-12 col-md-12 text-center">
+            <div id="page-slogan">
+                <div class="slogan-text">好的工具，事半功倍</div>
+            </div>
             <div id="page-main">
-                页面待开发中
+                <!-- 页面待开发中 -->
+                <div class="sidebar">
+                    <ul>
+                        {% for title in category_list %}
+                            <li {% if forloop.first %} class="selected" {% endif %}>{{ title }}</li>
+                        {% empty %}
+                            <li class="default-empty">空空如也</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="section-wrapper">
+                    {% for item in item_list %}
+                        <div class="item">{{ item }}</div>
+                    {% empty %}
+                        <div class="default-empty">空空如也</div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block footer_js %}
+    <script type="text/javascript">
+        // 模板变量
+        GLOGAL.GENERATE_CAPTCHA_URL = "{% url 'pages:generate_captcha' %}";
+    </script>
+    <script type="text/javascript">
+        function sectionAutoResize() {
+            $(window).on('resize', function() {
+                var $body = $(document.body);
+                $('#page-main').css('min-height', 0);
+                var hh = $body.find('nav.navbar').outerHeight(true),
+                    sh = $body.find('#page-slogan').outerHeight(true),
+                    fh = $body.find('.page-footer').outerHeight(true);
+                var bh = $(window).height() - hh - fh;
+                var min_bh = 120;
+                $body.find('.page-main').css('min-height', Math.max(min_bh, bh));
+                $('#page-main').css('min-height', $body.find('.page-main').height() - sh);
+            });
+            $(window).trigger('resize');
+        }
+
+        function bindSidebarClick() {
+            $('.sidebar > ul > li').on('click', function(evt, ignore_selected) {
+                var $self = $(this);
+                if($self.hasClass('selected') && !ignore_selected) {
+                    return;
+                }
+                $self.siblings('li.selected').removeClass('selected');
+                $self.addClass('selected');
+            });
+        }
+
+        $(document).ready(function() {
+            sectionAutoResize();
+            bindSidebarClick();
+        });
+    </script>
 {% endblock %}

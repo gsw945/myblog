@@ -8,6 +8,9 @@ from .models import Article, Tag
 
 def view_index(request):
     context = {}
+    # context['category_list'] = ['Chrome插件', '应用软件', '开发工具']
+    context['category_list'] = ['Chrome插件', 'VSCode插件', 'SublimeText插件']
+    context['item_list'] = list(range(0, 10))
     return render(request, 'page-index.html', context)
 
 def view_list(request):
