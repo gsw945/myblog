@@ -20,12 +20,12 @@ python manage.py changepassword admin
 ```bash
 # start server (use one of below 3 types of wsgi-server:)
 # # wsgi-server 1: django server (worst performance)
-python manage.py runserver 127.0.0.1:8282
+python manage.py runserver 127.0.0.1:8000
 # # wsgi-server 2: tornado (medium performance)
 python tornado-server.py
 # # wsgi-server 3: hendrix(twisted) (best performance)
 python twisted-server.py
-# visit http://127.0.0.1:8282/
+# visit http://127.0.0.1:8000/
 ```
 
 ### view user list
