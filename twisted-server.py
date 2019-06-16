@@ -1,4 +1,5 @@
 import os
+import io
 import sys
 
 from django.core.wsgi import get_wsgi_application
@@ -18,7 +19,6 @@ from twisted.logger import (
     globalLogPublisher, LogLevel, textFileLogObserver, ILogObserver,
     FilteringLogObserver, LogLevelFilterPredicate
 )
-from hendrix.logger import hendrixObserver
 from hendrix.deploy.base import HendrixDeploy
 
 
@@ -37,8 +37,17 @@ is_logging = True
 is_log2file = False
 if is_logging:
     if is_log2file:
+        DEFAULT_LOG_FILE = os.path.join(settings.BASE_DIR, 'default-hendrix.log')
+
+        @provider(ILogObserver)
+        def FileObserver(path=DEFAULT_LOG_FILE, log_level=LogLevel.warn):
+            file_observer = textFileLogObserver(io.open(path, 'at'))
+            return FilteringLogObserver(
+                file_observer,
+                [LogLevelFilterPredicate(log_level), ]
+            )
         log_path = os.path.join(settings.BASE_DIR, 'hendrix-debug.log')
-        globalLogPublisher.addObserver(hendrixObserver(path=log_path, log_level=LogLevel.debug))
+        globalLogPublisher.addObserver(FileObserver(path=log_path, log_level=LogLevel.debug))
     else:
         @provider(ILogObserver)
         def ConsoleObserver(log_level=LogLevel.warn):
