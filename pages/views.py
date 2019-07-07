@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.core.paginator import Paginator
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from .models import Article, Tag, ToolCategory
 
 
@@ -11,7 +11,7 @@ def view_index(request):
     context['category_list'] = ToolCategory.objects.filter(display=True).order_by('index').all()
     context['category_tools'] = []
     if context['category_list'].count() > 0:
-        context['category_tools'] = context['category_list'].first().tool_set.all()
+        context['category_tools'] = context['category_list'].first().tool_set.filter(display=True).order_by('index').all()
     return render(request, 'page-index.html', context)
 
 def view_list(request):

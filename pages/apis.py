@@ -3,8 +3,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import validate_email
 from ipware import get_client_ip
 from ratelimit.decorators import ratelimit
+from easy_thumbnails.files import get_thumbnailer
 
-from .models import ArticleAnalysis, Article, Message
+from .models import ArticleAnalysis, Article, Message, ToolCategory
 from .captcha import  web_captcha
 
 
@@ -174,4 +175,65 @@ def api_leave_message(request):
                 'error': 1,
                 'desc': error_msg
             }
+    return JsonResponse(ret)
+
+def api_category_tools(request):
+    req_params = getattr(request, request.method.upper(), request.POST)
+    req_category = req_params.get('category', None)
+    ret = {}
+    if bool(req_category):
+        if req_category.isdigit():
+            category_id = int(req_category)
+            obj = ToolCategory.objects.filter(pk=category_id).first()
+            if isinstance(obj, ToolCategory):
+                tools = obj.tool_set.filter(display=True).order_by('index').all()
+                rows = []
+                # refer: https://easy-thumbnails.readthedocs.io/en/stable/usage/#python
+                thumbnail_options = {
+                    'quality': 100,
+                    'subsampling': 2,
+                    'autocrop': False,
+                    'bw': False,
+                    'replace_alpha': '#fff',
+                    'detail': False,
+                    'sharpen': False,
+                    'crop': 'scale',
+                    'upscale': True
+                }
+                thumbnail_options.update({'size': (58, 58)})
+                for tool in tools:
+                    thumbnailer = get_thumbnailer(tool.cover)
+                    thumb = thumbnailer.get_thumbnail(thumbnail_options)
+                    tool_json = {
+                        'detail': tool.detail,
+                        'name': tool.name,
+                        'cover': {
+                            'url': thumb.url,
+                            'width': thumb.width,
+                            'height': thumb.height
+                        },
+                        'name': tool.name,
+                        'intro': tool.intro
+                    }
+                    rows.append(tool_json)
+                ret = {
+                    'error': 0,
+                    'desc': None,
+                    'rows': rows
+                }
+            else:
+                ret = {
+                    'error': 3,
+                    'desc': '请求的[category]不存在'
+                }
+        else:
+            ret = {
+                'error': 2,
+                'desc': '参数[category]错误'
+            }
+    else:
+        ret = {
+            'error': 1,
+            'desc': '参数[category]缺失'
+        }
     return JsonResponse(ret)

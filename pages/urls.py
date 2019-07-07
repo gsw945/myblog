@@ -6,6 +6,7 @@ from . import apis
 app_name = 'pages'
 urlpatterns = [
     path('', views.view_index, name='index'),
+    path('category-tools', apis.api_category_tools, name="category_tools"),
     path('article/', views.view_list, name='list'),
     path('article/<int:article_id>', views.view_detail, name='detail'),
     path('copyright/', views.view_copyright, name='copyright'),

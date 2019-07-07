@@ -6,6 +6,7 @@
 
 {% block head_css %}
     {{ block.super }}
+    {% include "widgets/loading-style.html" %}
     <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .navbar.navbar-static-top {
@@ -126,6 +127,9 @@
             height: 1em;
             lin-height: 1em;
         }
+        .default-empty.error {
+            color: #f00;
+        }
     </style>
 {% endblock %}
 
@@ -140,7 +144,7 @@
                 <div class="sidebar">
                     <ul>
                         {% for category in category_list %}
-                            <li {% if forloop.first %} class="selected" {% endif %}>{{ category.name }}</li>
+                            <li {% if forloop.first %} class="selected" {% endif %} data-category="{{ category.pk }}">{{ category.name }}</li>
                         {% empty %}
                             <li class="default-empty">空空如也</li>
                         {% endfor %}
@@ -162,6 +166,10 @@
                         <div class="default-empty">空空如也</div>
                     {% endfor %}
                 </div>
+                <!-- 网络不好时，loading占位 -->
+                <script id="loading-template" type="text/x-template">
+                    {% include "widgets/loading-html.html" with loading_text='数据加载中' %}
+                </script>
             </div>
         </div>
     </div>
@@ -170,7 +178,7 @@
 {% block footer_js %}
     <script type="text/javascript">
         // 模板变量
-        GLOGAL.GENERATE_CAPTCHA_URL = "{% url 'pages:generate_captcha' %}";
+        GLOGAL.CATEGORY_TOOLS_URL = "{% url 'pages:category_tools' %}";
     </script>
     <script type="text/javascript">
         function sectionAutoResize() {
@@ -188,6 +196,63 @@
             $(window).trigger('resize');
         }
 
+        function renderCategoryTools($wrapper, data) {
+            for (var i = 0; i < data.length; i++) {
+                var tool = data[i];
+                var detail_data = '',
+                    detail_title = '暂无详细使用介绍';
+                if(!!tool.detail) {
+                    detail_data = tool.detail;
+                    detail_title = tool.detail;
+                }
+
+                var item_html = [
+                    '<div class="item" data-detail="', detail_data, '" title="', detail_title, '">',
+                        '<strong>', tool.name, '</strong>',
+                        '<div class="item-content">',
+                            '<img src="', tool.cover.url, '" data-width="', tool.cover.width, '" data-height="', tool.cover.height, '" alt="', tool.name, '" />',
+                            '<div class="item-intro">', tool.intro, '<span class="intro-extending"></span></div>',
+                            '<div class="overflow-mask">...</div>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+                $wrapper.append(item_html);
+            }
+            itemAddMask();
+        }
+
+        function requestCategoryTools(category_id) {
+            var $wrapper = $('#page-main .section-wrapper');
+            // 显示加载层
+            $wrapper.html($('#loading-template').html());
+            $.ajax({
+                url: GLOGAL.CATEGORY_TOOLS_URL,
+                type: 'POST',
+                data: {
+                    'category': category_id
+                },
+                dataType: 'json'
+            }).done(function(resp) {
+                // 移除加载层
+                $('.loading-wrapper').remove();
+                // console.log(resp);
+                if(resp.error == 0)  {
+                    if(resp.rows.length < 1) {
+                        $wrapper.html('<div class="default-empty">空空如也</div>');
+                    }
+                    else {
+                        renderCategoryTools($wrapper, resp.rows);
+                    }
+                }
+                else {
+                    // alert(resp.desc);
+                    $wrapper.html('<div class="default-empty error">' + resp.desc + '</div>');
+                }
+            }).fail(function(err) {
+                console.error(err);
+            });
+        }
+
         function bindSidebarClick() {
             $('.sidebar > ul > li').on('click', function(evt, ignore_selected) {
                 var $self = $(this);
@@ -196,6 +261,8 @@
                 }
                 $self.siblings('li.selected').removeClass('selected');
                 $self.addClass('selected');
+                var category_id = $self.attr('data-category');
+                requestCategoryTools(category_id);
             });
         }
 
@@ -235,7 +302,10 @@
                     }
                 }
                 else {
-                    $C.find('.item-intro').append("。");
+                    var intro = $C.find('.item-intro').text();
+                    if(!(/([\u0000-\uffff]|[.\s])+。$/).test(intro)) {
+                        $C.find('.item-intro').append("。");
+                    }
                 }
             });
         }
