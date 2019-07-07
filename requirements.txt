@@ -10,5 +10,6 @@ matplotlib
 fontTools
 tornado
 zope.interface
+pyOpenSSL
 twisted
 hendrix

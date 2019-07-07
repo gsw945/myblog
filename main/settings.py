@@ -25,17 +25,19 @@ SECRET_KEY = 'de6x6i!%w0n#0urcwanj&%+t41i@m^y!0=n23cl*4zo#0u&9&q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'blog.gsw945.com',
+    '127.0.0.1',
+    'localhost',
+]
 if DEBUG:
     from socket import gethostname, gethostbyname
-    ALLOWED_HOSTS = [
+    ALLOWED_HOSTS.extend([
         'test.wx.gsw945.com',
-        '127.0.0.1',
-        'localhost',
         gethostname(),
         gethostbyname(gethostname())
-    ]
-    print(ALLOWED_HOSTS)
+    ])
+print(ALLOWED_HOSTS)
 
 
 # Application definition
