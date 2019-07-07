@@ -1,5 +1,6 @@
 {% extends "base-layout.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}首页 - {{ block.super }}{% endblock %}
 
@@ -66,16 +67,64 @@
         }
         .section-wrapper .item {
             display: inline-block;
-            width: 14.6em;
-            height: 10em;
+            width: 15em;
+            height: 10.4em;
             margin-bottom: 3px;
+            position: relative;
+            padding: 0.2em;
+            border: 1px solid #d0d1de;
+            cursor: pointer;
         }
         .section-wrapper .item:nth-of-type(2n+1) {
             /*background-color: #ffe5b5;*/
             background-color: #fff6e5;
         }
         .section-wrapper .item:nth-of-type(2n) {
-            background-color: #bfdbff;
+            /*background-color: #bfdbff;*/
+        }
+        .section-wrapper .item:hover > strong {
+            color: #0f3ff7;
+            text-decoration: underline;
+        }
+        .section-wrapper .item .item-content {
+            text-align: left;
+            overflow: hidden;
+            height: calc(10em - 1em - 6px);
+        }
+        .section-wrapper .item .item-content > img {
+            width: 58px;
+            height: 58px;
+            margin-right: 4px;
+            margin-bottom: 2px;
+            float: left;
+        }
+        .section-wrapper .item .item-content > .item-intro {
+            overflow: hidden;
+            display: inline;
+        }
+        .section-wrapper .item .item-content > .overflow-mask {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            right: 0.2em;
+            font-size: 1.7em;
+            height: 0.85em;
+            line-height: 0.2em;
+            vertical-align: top;
+            background-color: #fff6e5;
+            padding-left: 3px;
+            color: #909090;
+            overflow: hidden;
+            -webkit-user-select: none; /* Chrome all / Safari all */
+            -moz-user-select: none;   /* Firefox all */
+            -ms-user-select: none;  /* IE 10+ */
+            user-select: none;  /* Likely future */
+        }
+        .intro-extending {
+            display: inline-block;
+            width: 1.5em;
+            height: 1em;
+            lin-height: 1em;
         }
     </style>
 {% endblock %}
@@ -98,8 +147,17 @@
                     </ul>
                 </div>
                 <div class="section-wrapper">
-                    {% for item in item_list %}
-                        <div class="item">{{ item }}</div>
+                    {% for tool in category_tools %}
+                        <div class="item" data-detail="{{ tool.detail|default_if_none:'' }}" title="{{ tool.detail|default_if_none:'暂无详细使用介绍' }}">
+                            <strong>{{ tool.name }}</strong>
+                            <div class="item-content">
+                                {# https://easy-thumbnails.readthedocs.io/en/stable/usage/#overview #}
+                                {% thumbnail tool.cover 58x58 quality=100 subsampling=2 autocrop=False bw=False replace_alpha="#fff" detail=False sharpen=False crop="scale" upscale=True as thumb_cover %}
+                                <img src="{{ thumb_cover.url }}" data-width="{{ thumb_cover.width }}" data-height="{{ thumb_cover.height }}" alt="{{ tool.name }}" />
+                                <div class="item-intro">{{ tool.intro }}<span class="intro-extending"></span></div>
+                                <div class="overflow-mask">...</div>
+                            </div>
+                        </div>
                     {% empty %}
                         <div class="default-empty">空空如也</div>
                     {% endfor %}
@@ -141,9 +199,52 @@
             });
         }
 
+        function openNewTab(url) {
+            var $form = $('<form action="' + url +'" method="GET" target="_blank"></form>');
+            $(document.body).append($form);
+            setTimeout(function() {
+                $form.trigger('submit');
+                setTimeout(function() {
+                    $form.remove();
+                }, 50);
+            }, 50);
+        }
+
+        function bindItemClick() {
+            $('#page-main .section-wrapper').on('click', '.item', function() {
+                var $item = $(this);
+                var detail = $item.attr('data-detail');
+                if(detail && detail.length > 0) {
+                    if(!window.open(detail, '_blank')) {
+                        openNewTab(detail);
+                    }
+                }
+            });
+        }
+
+        function itemAddMask() {
+            $('#page-main .section-wrapper .item').each(function() {
+                var $item = $(this);
+                var $C = $item.find('.item-content');
+                var max_h = $C.height(),
+                    h = $C.find('.item-intro').height();
+                $C.find('.item-intro').find('.intro-extending').remove();
+                if(h > max_h) {
+                    if(!$C.find('.overflow-mask').hasClass('show')) {
+                        $C.find('.overflow-mask').addClass('show');
+                    }
+                }
+                else {
+                    $C.find('.item-intro').append("。");
+                }
+            });
+        }
+
         $(document).ready(function() {
             sectionAutoResize();
             bindSidebarClick();
+            bindItemClick();
+            itemAddMask();
         });
     </script>
 {% endblock %}

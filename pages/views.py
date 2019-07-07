@@ -8,8 +8,10 @@ from .models import Article, Tag, ToolCategory
 
 def view_index(request):
     context = {}
-    context['category_list'] = article_list = ToolCategory.objects.filter(display=True).order_by('index').all()
-    context['item_list'] = list(range(0, 10))
+    context['category_list'] = ToolCategory.objects.filter(display=True).order_by('index').all()
+    context['category_tools'] = []
+    if context['category_list'].count() > 0:
+        context['category_tools'] = context['category_list'].first().tool_set.all()
     return render(request, 'page-index.html', context)
 
 def view_list(request):
