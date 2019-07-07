@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'martor',
+    'easy_thumbnails',
+    'filer',
+    'mptt',
     'pages.apps.PagesConfig'
 ]
 
@@ -210,6 +213,25 @@ MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
 # 250MB - 214958080
 # 500MB - 429916160
 MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
+
+# easy_thumbnails to support retina displays
+THUMBNAIL_HIGH_RESOLUTION = True
+
+# Subject location aware cropping
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    #'easy_thumbnails.processors.scale_and_crop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters',
+)
+
+# “filer” part of the URL
+FILER_CANONICAL_URL = 'canonical/'
+
+# Debugging and logging
+FILER_DEBUG = True
+FILER_ENABLE_LOGGING = True
 
 # 站点信息
 SITE_INFO = {

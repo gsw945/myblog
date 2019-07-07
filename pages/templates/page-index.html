@@ -45,6 +45,9 @@
             padding: 4px 7px 5px 0;
             cursor: default;
         }
+        .sidebar > ul > li:not(:first-of-type){
+            border-top: 1px dotted #e1e3ef;
+        }
         .sidebar > ul > li:not(.selected):hover {
             color: #247ef3;
             background-color: #f8f5ef;
@@ -81,14 +84,14 @@
     <div class="row">
         <div class="col-xs-12 col-md-12 text-center">
             <div id="page-slogan">
-                <div class="slogan-text">好的工具，事半功倍</div>
+                <div class="slogan-text">用好工具，事半功倍</div>
             </div>
             <div id="page-main">
                 <!-- 页面待开发中 -->
                 <div class="sidebar">
                     <ul>
-                        {% for title in category_list %}
-                            <li {% if forloop.first %} class="selected" {% endif %}>{{ title }}</li>
+                        {% for category in category_list %}
+                            <li {% if forloop.first %} class="selected" {% endif %}>{{ category.name }}</li>
                         {% empty %}
                             <li class="default-empty">空空如也</li>
                         {% endfor %}

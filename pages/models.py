@@ -8,16 +8,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from martor.views import MARTOR_MARKDOWNIFY_FUNCTION, import_string
 from bs4 import BeautifulSoup
 from bs4 import Comment
+from filer.fields.image import FilerImageField
+from filer.fields.file import FilerFileField
 
 
 markdownify = import_string(MARTOR_MARKDOWNIFY_FUNCTION)
 
 class Article(models.Model):
-    title = models.CharField('标题', max_length=200)
+    title = models.CharField(verbose_name='标题', max_length=200)
     content = models.TextField(verbose_name='内容', default=None, blank=True, null=True)
     abstract = models.TextField(verbose_name='摘要', default=None, blank=True, null=True)
-    create_time = models.DateTimeField('创建时间', default=timezone.now)
-    upate_time = models.DateTimeField('最后修改时间', auto_now=True)
+    create_time = models.DateTimeField(verbose_name='创建时间', default=timezone.now)
+    upate_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
     tags = models.ManyToManyField('Tag', through='ArticleTags')
     
     def __str__(self):
@@ -60,7 +62,7 @@ def update_article_abstract(sender, instance, **kwargs):
     Article.objects.filter(id=instance.id).update(abstract=abstract)
 
 class Tag(models.Model):
-    name = models.CharField('标签名', max_length=30)
+    name = models.CharField(verbose_name='标签名', max_length=30)
     articles = models.ManyToManyField('Article', through='ArticleTags')
 
     def __str__(self):
@@ -85,9 +87,9 @@ class ArticleTags(models.Model):
 
 class ArticleAnalysis(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    client_ip = models.CharField('访问者IP', max_length=255)
-    is_routable = models.BooleanField('是否是可路由')
-    access_time = models.DateTimeField('访问时间', default=timezone.now)
+    client_ip = models.CharField(verbose_name='访问者IP', max_length=255)
+    is_routable = models.BooleanField(verbose_name='是否是可路由')
+    access_time = models.DateTimeField(verbose_name='访问时间', default=timezone.now)
 
     def __str__(self):
         return '{0}[{1}]'.format(self.article.title, self.client_ip)
@@ -113,22 +115,22 @@ class Message(models.Model):
 
 
 class AccessAnalysis(models.Model):
-    regular = models.BooleanField('是否是回头客', default=False)
-    uid = models.CharField('访问者ID', max_length=32)
-    method = models.CharField('HTTP方法', max_length=16)
-    url = models.TextField('访问的URL', blank=False, null=False)
-    referer = models.TextField('访问来源页面URL', default=None, blank=True, null=True)
-    remote_addr = models.CharField('访问者网络地址', max_length=255, default=None, blank=True, null=True)
-    x_real_ip = models.CharField('访问者真实IP', max_length=255, default=None, blank=True, null=True)
-    x_forwarded_for = models.CharField('访问者反向代理地址', max_length=255, default=None, blank=True, null=True)
-    accept_language = models.CharField('访问者语言', max_length=255, default=None, blank=True, null=True)
-    host = models.CharField('访问的站点主机', max_length=255, default=None, blank=True, null=True)
-    remote_host = models.CharField('访问者主机', max_length=255, default=None, blank=True, null=True)
-    remote_user = models.CharField('访问者用户', max_length=255, default=None, blank=True, null=True)
-    user_agent = models.CharField('访问者User-Agent标识', max_length=255, default=None, blank=True, null=True)
-    x_requested_with = models.CharField('XHR标识', max_length=64, default=None, blank=True, null=True)
-    dt_str = models.CharField('访问时间(字符串)', max_length=26, default=None, blank=True, null=True)
-    access_time = models.DateTimeField('访问时间', default=timezone.now)
+    regular = models.BooleanField(verbose_name='是否是回头客', default=False)
+    uid = models.CharField(verbose_name='访问者ID', max_length=32)
+    method = models.CharField(verbose_name='HTTP方法', max_length=16)
+    url = models.TextField(verbose_name='访问的URL', blank=False, null=False)
+    referer = models.TextField(verbose_name='访问来源页面URL', default=None, blank=True, null=True)
+    remote_addr = models.CharField(verbose_name='访问者网络地址', max_length=255, default=None, blank=True, null=True)
+    x_real_ip = models.CharField(verbose_name='访问者真实IP', max_length=255, default=None, blank=True, null=True)
+    x_forwarded_for = models.CharField(verbose_name='访问者反向代理地址', max_length=255, default=None, blank=True, null=True)
+    accept_language = models.CharField(verbose_name='访问者语言', max_length=255, default=None, blank=True, null=True)
+    host = models.CharField(verbose_name='访问的站点主机', max_length=255, default=None, blank=True, null=True)
+    remote_host = models.CharField(verbose_name='访问者主机', max_length=255, default=None, blank=True, null=True)
+    remote_user = models.CharField(verbose_name='访问者用户', max_length=255, default=None, blank=True, null=True)
+    user_agent = models.CharField(verbose_name='访问者User-Agent标识', max_length=255, default=None, blank=True, null=True)
+    x_requested_with = models.CharField(verbose_name='XHR标识', max_length=64, default=None, blank=True, null=True)
+    dt_str = models.CharField(verbose_name='访问时间(字符串)', max_length=26, default=None, blank=True, null=True)
+    access_time = models.DateTimeField(verbose_name='访问时间', default=timezone.now)
 
     def __str__(self):
         return '{0}[{1}]'.format(self.remote_addr, self.uid)
@@ -136,4 +138,39 @@ class AccessAnalysis(models.Model):
     class Meta:
         verbose_name = '站点访问统计'
         verbose_name_plural = '站点访问统计'
+        app_label = 'pages'
+
+class ToolCategory(models.Model):
+    name = models.CharField(verbose_name='分类名', max_length=200)
+    index = models.IntegerField(verbose_name='排序索引', default=1)
+    display = models.BooleanField(verbose_name='是否显示', default=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = '工具分类'
+        verbose_name_plural = '工具分类'
+        app_label = 'pages'
+
+class Tool(models.Model):
+    COVER_TYPES = (
+        ('LINK', '图片链接'),
+        ('TEXT', '文本'),
+        ('BASE64', 'Base64图片'),
+    )
+    name = models.CharField(verbose_name='工具名', max_length=200)
+    cover = FilerImageField(verbose_name='封面', default=None, null=True, blank=True, related_name='cover_tool', on_delete=models.SET_NULL)
+    intro = models.TextField(verbose_name='简介', default=None, blank=True, null=True)
+    detail = models.CharField(verbose_name='详细(使用)介绍', max_length=254, default=None, blank=True, null=True)
+    index = models.IntegerField(verbose_name='排序索引', default=1)
+    display = models.BooleanField(verbose_name='是否显示', default=True)
+    category = models.ForeignKey(ToolCategory, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = '工具'
+        verbose_name_plural = '工具'
         app_label = 'pages'

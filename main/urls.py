@@ -35,6 +35,7 @@ urlpatterns = [
     path('', include('pages.urls')),
     path('admin/', admin.site.urls),
     path('martor/', include('martor.urls')),
+    path('filer/', include('filer.urls')),
     path('api/uploader/', markdown_uploader, name='markdown_uploader_page'),
 ]
 

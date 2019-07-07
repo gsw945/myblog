@@ -8,6 +8,8 @@ Blog by Django
 ```bash
 # install pip packages
 pip install -r requments.txt -i https://pypi.doubanio.com/simple/ --trusted-host pypi.doubanio.com
+# generate migrate files
+# python manage.py makemigrations
 # database init
 python manage.py migrate
 # create admin account

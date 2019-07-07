@@ -7,7 +7,8 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from .models import (
-    Article, Tag, ArticleTags, ArticleAnalysis, Message, AccessAnalysis
+    Article, Tag, ArticleTags, ArticleAnalysis, Message, AccessAnalysis,
+    ToolCategory, Tool,
 )
 
 
@@ -87,3 +88,40 @@ class AccessAnalysisAdmin(admin.ModelAdmin):
         'user_agent', 'x_requested_with', 'dt_str', 'access_time'
     ] # 只读字段
 admin.site.register(AccessAnalysis, AccessAnalysisAdmin)
+
+class ToolCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'index', 'display']
+
+    def get_ordering(self, request):
+        return ['index', '-display']
+
+    def get_form(self, request, obj=None, **kwargs):
+        '''新建表单重写'''
+        form = super(ToolCategoryAdmin, self).get_form(request, obj, **kwargs)
+        # 读取最大排序index
+        max_index = ToolCategory.objects.values('index').order_by('-index').first() or {}
+        # 设置index默认值
+        form.base_fields['index'].initial = max_index.get('index', 0) + 1
+        return form
+
+admin.site.register(ToolCategory, ToolCategoryAdmin)
+class ToolAdmin(admin.ModelAdmin):
+    list_display = ['name', 'index', 'display']
+
+    def get_ordering(self, request):
+        return ['index', '-display']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ToolAdmin, self).get_form(request, obj, **kwargs)
+        max_index = Tool.objects.values('index').order_by('-index').first() or {}
+        form.base_fields['index'].initial = max_index.get('index', 0) + 1
+        return form
+
+    class Media:
+        from django.conf import settings
+        static_url = getattr(settings, 'settings.STATIC_URL', '/static')
+        extend = True
+        js = [
+            static_url + '/admin/tool.js',
+        ]
+admin.site.register(Tool, ToolAdmin)

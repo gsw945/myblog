@@ -3,13 +3,12 @@ from django.shortcuts import render
 # Create your views here.
 from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
-from .models import Article, Tag
+from .models import Article, Tag, ToolCategory
 
 
 def view_index(request):
     context = {}
-    # context['category_list'] = ['Chrome插件', '应用软件', '开发工具']
-    context['category_list'] = ['Chrome插件', 'VSCode插件', 'SublimeText插件']
+    context['category_list'] = article_list = ToolCategory.objects.filter(display=True).order_by('index').all()
     context['item_list'] = list(range(0, 10))
     return render(request, 'page-index.html', context)
 
