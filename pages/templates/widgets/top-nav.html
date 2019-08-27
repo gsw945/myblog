@@ -14,7 +14,9 @@
                 {% if user.is_authenticated %}
                     <li data-page-view="admin:pages_article_add"><a href="{% url 'admin:pages_article_add' %}">去写博客</a></li>
                 {% endif %}
-                <li data-page-view="pages:list"><a href="{% url 'pages:list' %}"><strong>博文列表</strong></a></li>
+                <li data-page-view="pages:list">
+                    <a {% if request.resolver_match.view_name == 'pages:list' %}{% if request.GET.query or request.GET.tag %}title="点击去掉搜索条件"{% endif %}{% endif %} href="{% url 'pages:list' %}"><strong>博文列表</strong></a>
+                </li>
                 <!--
                 <li data-page-view="pages:copyright"><a href="{% url 'pages:copyright' %}">版权声明</a></li>
                 -->
@@ -30,12 +32,15 @@
                 </li>
                 <li class="top-nav-search">
                     <!-- <input type="text" name="txt-search" placeholder="search" /> -->
-                    <form action="{% url 'pages:search' %}" id="header-search" class="navbar-form" role="search">
+                    <form action="{% url 'pages:list' %}" id="header-search" class="navbar-form" role="search">
                         <div class="form-group">
                             <div class="input-group-container header-search">
-                                <span class="input-group-container-addon">
+                                <span class="input-group-container-addon" title="点我搜索">
                                     <span class="glyphicon glyphicon-search"></span>
                                 </span>
+                                {% if request.GET.tag %}
+                                <input type="hidden" name="tag" value="{{ request.GET.tag }}" />
+                                {% endif %}
                                 <input type="text" class="form-control" placeholder="回车搜索" name="query" value="{{ request.GET.query }}" />
                             </div>
                         </div>

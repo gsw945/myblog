@@ -31,6 +31,10 @@
     cursor: pointer;
 }
 
+.header-search.input-group-container:hover > .input-group-container-addon {
+    color: #73716b;
+}
+
 .header-search.input-group-container > .input-group-container-addon > span {
     line-height: 30px;
     top: 0;
