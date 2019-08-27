@@ -14,10 +14,65 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-md-12 text-center">
+        <div class="col-xs-12 col-md-12">
             <div id="page-main">
-                搜索功能-页面-待开发中
+                <div class="search-form" role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-5">
+                            <div class="input-group">
+                                <input id="search-text" type="text" class="form-control" name="query" value="{{ request.GET.query }}" />
+                                <span class="input-group-btn">
+                                    <button id="search-btn" class="btn btn-default" type="button">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                        <span>搜索</span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-info">
+                    <span>根据关键词</span>
+                    <span class="search-keyword"></span>
+                    <span>找到相关结果</span>
+                    <span class="search-count">0</span>
+                    <span>条</span>
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block footer_js %}
+    <script type="text/javascript">
+        function search_submit($search) {
+            $search.val($search.val().trim());
+            $('#header-search').find('input[name="query"]').val($search.val());
+            $('#header-search').trigger('submit');
+        }
+        $(document).ready(function() {
+            var $main = $('#page-main');
+            var $search = $('#search-text');
+            $main.find('.search-info').find('.search-keyword').text($search.val());
+            if($search.val().length < 1) {
+                $main.find('.search-info').hide();
+            }
+            else {
+                $main.find('.search-info').show();
+            }
+
+            $('#search-btn').on('click', function() {
+                search_submit($search);
+            });
+            $('#search-text').on('keypress', function(event) {
+                if((event.which || event.keyCode) == 13) {
+                    search_submit($search);
+                }
+            });
+
+            $('#search-text').on('input propertychange', function() {
+                $('#header-search').find('input[name="query"]').val($search.val().trim());
+            });
+        });
+    </script>
 {% endblock %}

@@ -28,6 +28,7 @@
     margin: 0 auto;
     padding: 0 10px;
     color: #c8c8c8;
+    cursor: pointer;
 }
 
 .header-search.input-group-container > .input-group-container-addon > span {

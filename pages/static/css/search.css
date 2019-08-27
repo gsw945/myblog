@@ -1,0 +1,12 @@
+.search-form {
+    padding: 0px 0 5px 0;
+    border-bottom: 1px solid #bbb;
+    margin-bottom: 3px;
+}
+.search-keyword {
+    font-weight: 500;
+    color: #d24b16;
+}
+.search-count {
+    font-weight: 500;
+}

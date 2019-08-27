@@ -80,6 +80,12 @@
                     $current.parents('li.dropdown').addClass('active');
                 }
             }
+
+            // 顶部搜索
+            $('.header-search.input-group-container > .input-group-container-addon').on('click', function() {
+                var query = $(this).parent().find('input[name="query"]').val();
+                alert(query);
+            });
         });
     </script>
     {% block footer_js %}{% endblock %}
