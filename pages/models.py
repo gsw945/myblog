@@ -133,7 +133,7 @@ class AccessAnalysis(models.Model):
     access_time = models.DateTimeField(verbose_name='访问时间', default=timezone.now)
 
     def __str__(self):
-        return '{0}[{1}]'.format(self.remote_addr, self.uid)
+        return '{0}[{1}]'.format((self.remote_addr or self.x_real_ip), self.uid)
 
     class Meta:
         verbose_name = '站点访问统计'
