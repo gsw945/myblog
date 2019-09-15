@@ -7,12 +7,23 @@ from django.apps import apps
 
 class AnalysisMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
+        if request.resolver_match is not None:
+            if request.resolver_match.namespace == 'admin':
+                if request.resolver_match.url_name not in ('login',):
+                    return response
+            elif request.resolver_match.namespace == '':
+                if request.resolver_match.url_name in ('favicon_ico', 'robots_txt', 'markdown_uploader_page', 'canonical'):
+                    return response
+                elif request.resolver_match.view_name in ('django.views.static.serve',):
+                    return response
+                elif request.resolver_match.func.__module__.startswith('martor.'):
+                    return response
         analysis_uid = request.COOKIES.get('analysis_uid')
         # 是否是回头客
         regular = True
         if not analysis_uid:
             regular = False
-            analysis_uid = uuid.uuid5(uuid.NAMESPACE_DNS, '').hex
+            analysis_uid = uuid.uuid5(uuid.NAMESPACE_DNS, datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')).hex
             cookie_kwargs = {
                 'expires': datetime.now() + timedelta(days=365),
                 'httponly': True

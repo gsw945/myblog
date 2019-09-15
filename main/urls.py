@@ -30,8 +30,8 @@ favicon_view = RedirectView.as_view(url=static_url('favicon.ico'), permanent=Tru
 robots_view = RedirectView.as_view(url=static_url('robots.txt'), permanent=True)
 
 urlpatterns = [
-    re_path(r'^favicon\.ico$', favicon_view),
-    re_path(r'^robots\.txt$', robots_view),
+    re_path(r'^favicon\.ico$', favicon_view, name='favicon_ico'),
+    re_path(r'^robots\.txt$', robots_view, name='robots_txt'),
     path('', include('pages.urls')),
     path('admin/', admin.site.urls),
     path('martor/', include('martor.urls')),
