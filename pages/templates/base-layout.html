@@ -22,6 +22,13 @@
     <link href="{% static 'css/top-nav.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'css/layout.css' %}" rel="stylesheet" type="text/css" />
     {% block head_css %}{% endblock %}
+    <style type="text/css">
+        #cnzz_stat_icon_1278608695 {
+            position: relative;
+            left: 2.5em;
+            vertical-align: bottom;
+        }
+    </style>
 </head>
 <body>
     {% include "widgets/top-nav.html" %}
@@ -89,5 +96,9 @@
         });
     </script>
     {% block footer_js %}{% endblock %}
+    <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("/*%3Cspan id='cnzz_stat_icon_1278608695'%3E%3C/span%3E*/%3Cscript src='" + cnzz_protocol + "s9.cnzz.com/z_stat.php%3Fid%3D1278608695%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script>
 </body>
 </html>
